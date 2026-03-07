@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WSPP — Wall Street Pour les Pauvres</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #07070D; --bg2: rgba(255,255,255,0.025);
+    --border: #15152A; --border2: #0D0D1E;
+    --text: #D8D8F0; --muted: #44445A; --muted2: #22223A;
+    --green: #4ADE80; --red: #F87171; --yellow: #FBBF24;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'DM Mono','Courier New',monospace; min-height: 100vh; font-size: 13px; }
+  ::-webkit-scrollbar { width: 3px; } ::-webkit-scrollbar-thumb { background: #1A1A2E; }
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 32px; border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.015);
+    position: sticky; top: 0; z-index: 100; backdrop-filter: blur(20px);
+  }
+  .logo-wrap { display: flex; align-items: center; gap: 16px; }
+  .logo { font-family: 'Bebas Neue',sans-serif; font-size: 26px; letter-spacing: 4px; background: linear-gradient(135deg,#4ADE80,#22D3EE); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .logo-sub { font-size: 9px; letter-spacing: 3px; color: var(--muted2); padding-top: 2px; }
+  .header-right { display: flex; align-items: center; gap: 14px; }
+  .live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }
+  .date-label { font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+  .saved-msg { font-size: 10px; color: var(--green); letter-spacing: 1px; opacity: 0; transition: opacity 0.3s; }
+  .saved-msg.show { opacity: 1; }
+  .tabs { display: flex; gap: 14px; padding: 22px 32px 0; flex-wrap: wrap; }
+  .tab { padding: 16px 22px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--bg2); cursor: pointer; min-width: 155px; transition: all 0.2s; user-select: none; }
+  .tab:hover { transform: translateY(-2px); }
+  .tab.active { border-color: var(--tc); background: color-mix(in srgb, var(--tc) 12%, transparent); }
+  .tab-emoji { font-size: 20px; margin-bottom: 4px; }
+  .tab-name { font-size: 13px; font-weight: 500; letter-spacing: 1px; color: var(--muted); }
+  .tab.active .tab-name { color: var(--tc); }
+  .tab-profile { font-size: 9px; letter-spacing: 2px; color: var(--muted2); margin-bottom: 8px; }
+  .tab-value { font-size: 15px; font-weight: 500; }
+  .tab-pnl { font-size: 10px; letter-spacing: 1px; margin-top: 2px; }
+  main { padding: 22px 32px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 20px; }
+  .stat-card { padding: 18px 22px; background: var(--bg2); border-radius: 12px; border: 1px solid var(--border); }
+  .stat-label { font-size: 9px; letter-spacing: 2px; color: var(--muted2); margin-bottom: 8px; }
+  .stat-value { font-size: 20px; font-weight: 500; letter-spacing: 1px; }
+  .stat-sub { font-size: 10px; color: var(--muted); margin-top: 4px; }
+  .panel { background: var(--bg2); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; margin-bottom: 16px; }
+  .panel-header { padding: 14px 22px; border-bottom: 1px solid var(--border2); display: flex; align-items: center; justify-content: space-between; }
+  .panel-title { font-size: 9px; letter-spacing: 2px; color: var(--muted); }
+  .panel-hint { font-size: 9px; color: var(--muted2); letter-spacing: 1px; }
+  .table-head { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr 1fr 1fr; padding: 9px 22px; border-bottom: 1px solid var(--border2); font-size: 9px; letter-spacing: 2px; color: var(--muted2); }
+  .ta-r { text-align: right; } .ta-c { text-align: center; }
+  .pos-row { display: grid; grid-template-columns: 2.2fr 1fr 1fr 1fr 1fr 1fr; padding: 13px 22px; border-bottom: 1px solid var(--border2); align-items: center; transition: background 0.15s; }
+  .pos-row:last-child { border-bottom: none; }
+  .pos-row:hover { background: rgba(255,255,255,0.03); }
+  .pos-name { font-size: 12px; color: #C0C0DC; letter-spacing: 0.3px; }
+  .pos-meta { font-size: 9px; color: var(--muted2); margin-top: 3px; letter-spacing: 1px; }
+  .edit-wrap { display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
+  .edit-pill { font-size: 9px; color: var(--muted2); padding: 2px 7px; border: 1px solid #1A1A2E; border-radius: 4px; cursor: pointer; opacity: 0; transition: opacity 0.15s; letter-spacing: 1px; font-family: inherit; background: transparent; }
+  .pos-row:hover .edit-pill { opacity: 1; }
+  .edit-input { background: #0F0F1E; border: 1.5px solid var(--tc, #4ADE80); border-radius: 7px; color: var(--text); padding: 5px 10px; width: 88px; font-size: 12px; font-family: inherit; text-align: right; outline: none; }
+  .badge { font-size: 9px; letter-spacing: 1px; padding: 3px 9px; border-radius: 20px; display: inline-block; }
+  .badge-low { background: rgba(74,222,128,0.1); color: #4ADE80; border: 1px solid rgba(74,222,128,0.25); }
+  .badge-med { background: rgba(251,191,36,0.1); color: #FBBF24; border: 1px solid rgba(251,191,36,0.25); }
+  .badge-high { background: rgba(248,113,113,0.1); color: #F87171; border: 1px solid rgba(248,113,113,0.25); }
+  .bar-wrap { display: flex; height: 7px; border-radius: 4px; overflow: hidden; gap: 2px; margin-bottom: 10px; }
+  .bar-legend { display: flex; gap: 14px; flex-wrap: wrap; }
+  .bar-legend-item { display: flex; align-items: center; gap: 6px; }
+  .bar-dot { width: 7px; height: 7px; border-radius: 2px; }
+  .bar-label { font-size: 9px; color: var(--muted); }
+  .note-add-row { display: flex; gap: 8px; margin-bottom: 12px; }
+  .note-input { flex: 1; background: #0A0A18; border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 8px 14px; font-size: 11px; font-family: inherit; outline: none; }
+  .btn { padding: 8px 16px; border-radius: 8px; border: none; font-family: inherit; font-size: 10px; letter-spacing: 1px; cursor: pointer; transition: all 0.15s; }
+  .btn-primary { background: var(--tc, #4ADE80); color: #000; font-weight: 700; }
+  .btn-ghost { background: transparent; border: 1px solid color-mix(in srgb, var(--tc, #4ADE80) 40%, transparent); color: var(--tc, #4ADE80); }
+  .note-list { display: flex; flex-direction: column; gap: 7px; }
+  .note-item { display: flex; gap: 12px; align-items: flex-start; }
+  .note-date { font-size: 9px; color: var(--muted2); min-width: 68px; padding-top: 2px; }
+  .note-text { font-size: 11px; color: #7070A0; }
+  .no-notes { font-size: 11px; color: var(--muted2); font-style: italic; }
+  .api-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .api-input { background: #0A0A18; border: 1px solid var(--border); border-radius: 8px; color: var(--text); padding: 8px 14px; font-size: 11px; font-family: inherit; outline: none; width: 220px; }
+  .up { color: var(--green); } .down { color: var(--red); }
+  footer { text-align: center; font-size: 9px; color: var(--muted2); letter-spacing: 2px; padding: 16px 32px 24px; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .fade-in { animation: fadeIn 0.3s ease; }
+  @media(max-width:800px){
+    .stats-grid{grid-template-columns:1fr 1fr;}
+    .table-head,.pos-row{grid-template-columns:2fr 1fr 1fr 1fr;}
+    .col-hide{display:none;}
+    header,.tabs,main{padding-left:16px;padding-right:16px;}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo-wrap">
+    <div><div class="logo">WSPP</div><div class="logo-sub">WALL STREET POUR LES PAUVRES</div></div>
+  </div>
+  <div class="header-right">
+    <span class="saved-msg" id="savedMsg">✓ SAUVEGARDÉ</span>
+    <div class="live-dot"></div>
+    <div class="date-label" id="dateLabel"></div>
+  </div>
+</header>
+<div class="tabs" id="tabs"></div>
+<main id="main"></main>
+<footer>SIMULATION PÉDAGOGIQUE · PAS UN CONSEIL EN INVESTISSEMENT · LES MARCHÉS COMPORTENT DES RISQUES DE PERTE EN CAPITAL</footer>
+
+<script>
+const KEY = 'wspp_v3';
+const DEFAULTS = {
+  portfolios: {
+    papa: {
+      name:"Papa", emoji:"👨", profile:"Équilibré", color:"#3B82F6", capital:500, startDate:"2026-03-07",
+      positions:[
+        {name:"ETF Défense Europe",     ticker:"DFEN", real:"ITA",  invested:150, current:150, sector:"Défense",     risk:"Moyen"},
+        {name:"ETF S&P 500",            ticker:"SP5",  real:"SPY",  invested:150, current:150, sector:"USA Large Cap",risk:"Moyen"},
+        {name:"ETF Obligations 1-3Y",   ticker:"EMUG", real:"SHY",  invested:100, current:100, sector:"Obligations",  risk:"Faible"},
+        {name:"ETF Stoxx 600 Europe",   ticker:"STOX", real:"VGK",  invested:100, current:100, sector:"Europe",       risk:"Moyen"},
+      ]
+    },
+    nayla: {
+      name:"Nayla", emoji:"👧", profile:"Croissance", color:"#8B5CF6", capital:500, startDate:"2026-03-07",
+      positions:[
+        {name:"ETF Intelligence Artificielle", ticker:"AIAI", real:"BOTZ", invested:200, current:200, sector:"Tech / IA",     risk:"Élevé"},
+        {name:"ETF Nasdaq 100",                ticker:"NDXQ", real:"QQQ",  invested:150, current:150, sector:"Tech USA",      risk:"Élevé"},
+        {name:"ETF Énergie Propre",            ticker:"CLNE", real:"ICLN", invested:100, current:100, sector:"Énergie verte", risk:"Moyen"},
+        {name:"ETF Marchés Émergents",         ticker:"EMRG", real:"VWO",  invested:50,  current:50,  sector:"Émergents",    risk:"Élevé"},
+      ]
+    },
+    hannan: {
+      name:"Hannan", emoji:"👩", profile:"Défensif", color:"#10B981", capital:500, startDate:"2026-03-07",
+      positions:[
+        {name:"ETF Obligations Souveraines", ticker:"GOVT", real:"BND", invested:200, current:200, sector:"Obligations",risk:"Faible"},
+        {name:"ETF Dividendes Europe",       ticker:"DIVD", real:"VYM", invested:150, current:150, sector:"Dividendes", risk:"Faible"},
+        {name:"ETF Santé Mondial",           ticker:"HLTH", real:"VHT", invested:100, current:100, sector:"Santé",      risk:"Faible"},
+        {name:"ETF Stoxx 600 Europe",        ticker:"STOX", real:"VGK", invested:50,  current:50,  sector:"Europe",     risk:"Moyen"},
+      ]
+    }
+  },
+  notes:{ papa:[], nayla:[], hannan:[] },
+  apiKey:""
+};
+
+// Prix de référence 07/03/2026 (proxy pour calculer la variation %)
+const BASE = { ITA:140, SPY:570, SHY:82, VGK:67, BOTZ:28, QQQ:490, ICLN:14, VWO:44, BND:72, VYM:122, VHT:262 };
+
+let D = JSON.parse(JSON.stringify(DEFAULTS));
+let user = 'papa', editing = null, showNote = false;
+const COLORS = ['#3B82F6','#22D3EE','#F59E0B','#EC4899','#8B5CF6','#10B981'];
+
+function load(){ try{ const r=localStorage.getItem(KEY); if(r) D=JSON.parse(r); }catch(e){} }
+function save(){ localStorage.setItem(KEY, JSON.stringify(D)); flash(); }
+function flash(){ const m=document.getElementById('savedMsg'); m.classList.add('show'); setTimeout(()=>m.classList.remove('show'),2000); }
+
+const eur = v => new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:2}).format(v);
+const pct = v => (v>=0?'+':'')+v.toFixed(2)+'%';
+const cls = v => v>=0?'up':'down';
+function badge(r){
+  if(r==='Faible') return '<span class="badge badge-low">Faible</span>';
+  if(r==='Moyen')  return '<span class="badge badge-med">Moyen</span>';
+  return '<span class="badge badge-high">Élevé</span>';
+}
+
+function render(){
+  document.getElementById('dateLabel').textContent =
+    new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});
+  renderTabs(); renderMain();
+}
+
+function renderTabs(){
+  document.getElementById('tabs').innerHTML = Object.keys(D.portfolios).map(k=>{
+    const p=D.portfolios[k];
+    const tot=p.positions.reduce((s,x)=>s+x.current,0);
+    const inv=p.positions.reduce((s,x)=>s+x.invested,0);
+    const pnl=tot-inv;
+    return `<div class="tab ${k===user?'active':''}" style="--tc:${p.color}" onclick="sw('${k}')">
+      <div class="tab-emoji">${p.emoji}</div>
+      <div class="tab-name">${p.name}</div>
+      <div class="tab-profile">${p.profile.toUpperCase()}</div>
+      <div class="tab-value">${eur(tot)}</div>
+      <div class="tab-pnl ${cls(pnl)}">${pnl>=0?'▲':'▼'} ${eur(Math.abs(pnl))}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderMain(){
+  const p = D.portfolios[user];
+  const tot = p.positions.reduce((s,x)=>s+x.current,0);
+  const inv = p.positions.reduce((s,x)=>s+x.invested,0);
+  const gpnl = tot-inv;
+  const gpct = (gpnl/inv)*100;
+  const c = p.color;
+  const notes = D.notes[user]||[];
+
+  const bars = p.positions.map((pos,i)=>{
+    const w=(pos.invested/inv*100).toFixed(1);
+    return `<div style="width:${w}%;background:${COLORS[i]};border-radius:2px"></div>`;
+  }).join('');
+  const legend = p.positions.map((pos,i)=>{
+    const w=(pos.invested/inv*100).toFixed(0);
+    return `<div class="bar-legend-item"><div class="bar-dot" style="background:${COLORS[i]}"></div><span class="bar-label">${pos.ticker} ${w}%</span></div>`;
+  }).join('');
+
+  const rows = p.positions.map((pos,idx)=>{
+    const pnl=pos.current-pos.invested;
+    const pp=(pnl/pos.invested)*100;
+    const cell = editing===idx
+      ? `<input class="edit-input" id="ei" type="number" value="${pos.current.toFixed(2)}"
+           style="--tc:${c}"
+           onblur="commit(${idx})" onkeydown="if(event.key==='Enter')commit(${idx});if(event.key==='Escape')cancel()"/>`
+      : `<div class="edit-wrap">
+           <button class="edit-pill" onclick="startEdit(${idx})">EDIT</button>
+           <span style="cursor:pointer" onclick="startEdit(${idx})">${eur(pos.current)}</span>
+         </div>`;
+    return `<div class="pos-row">
+      <div><div class="pos-name">${pos.name}</div><div class="pos-meta">${pos.ticker} · ${pos.sector}</div></div>
+      <div class="ta-r" style="color:#7070A0">${eur(pos.invested)}</div>
+      <div class="ta-r">${cell}</div>
+      <div class="ta-r ${cls(pnl)}" style="font-weight:500">${pnl>=0?'+':''}${eur(pnl)}</div>
+      <div class="ta-r ${cls(pp)} col-hide">${pct(pp)}</div>
+      <div class="ta-c col-hide">${badge(pos.risk)}</div>
+    </div>`;
+  }).join('');
+
+  const noteHtml = notes.length===0
+    ? `<div class="no-notes">Aucune note. Ajoute tes observations ici.</div>`
+    : `<div class="note-list">${notes.map(n=>`<div class="note-item"><div class="note-date">${n.date}</div><div class="note-text">${n.text}</div></div>`).join('')}</div>`;
+
+  document.getElementById('main').innerHTML = `<div class="fade-in" style="--tc:${c}">
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">CAPITAL DE DÉPART</div><div class="stat-value" style="color:#7070A0">${eur(p.capital)}</div><div class="stat-sub">${p.startDate}</div></div>
+      <div class="stat-card"><div class="stat-label">VALEUR ACTUELLE</div><div class="stat-value">${eur(tot)}</div><div class="stat-sub">${p.positions.length} positions</div></div>
+      <div class="stat-card"><div class="stat-label">GAIN / PERTE</div><div class="stat-value ${cls(gpnl)}">${gpnl>=0?'+':''}${eur(gpnl)}</div><div class="stat-sub ${cls(gpct)}">${pct(gpct)}</div></div>
+      <div class="stat-card"><div class="stat-label">PROFIL</div><div class="stat-value" style="color:${c};font-size:16px">${p.profile.toUpperCase()}</div><div class="stat-sub">${p.emoji} ${p.name}</div></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">POSITIONS</div><div class="panel-hint">cliquer sur la valeur pour mettre à jour</div></div>
+      <div class="table-head"><div>ACTIF</div><div class="ta-r">INVESTI</div><div class="ta-r">ACTUEL</div><div class="ta-r">P&L</div><div class="ta-r col-hide">%</div><div class="ta-c col-hide">RISQUE</div></div>
+      ${rows}
+    </div>
+
+    <div class="panel" style="padding:18px 22px">
+      <div class="panel-title" style="margin-bottom:12px">RÉPARTITION</div>
+      <div class="bar-wrap">${bars}</div>
+      <div class="bar-legend">${legend}</div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">JOURNAL DE ${p.name.toUpperCase()}</div>
+        <button class="btn btn-ghost" style="--tc:${c}" onclick="toggleNote()">+ NOTE</button>
+      </div>
+      <div style="padding:16px 22px">
+        <div id="ni" style="display:${showNote?'block':'none'};margin-bottom:12px">
+          <div class="note-add-row">
+            <input class="note-input" id="nt" placeholder="Ex: Tension Moyen-Orient, on garde défense..."
+              onkeydown="if(event.key==='Enter')addNote()"/>
+            <button class="btn btn-primary" style="--tc:${c}" onclick="addNote()">OK</button>
+          </div>
+        </div>
+        ${noteHtml}
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-header"><div class="panel-title">MISE À JOUR AUTOMATIQUE (ALPHA VANTAGE)</div></div>
+      <div style="padding:16px 22px">
+        <div style="font-size:10px;color:var(--muted);margin-bottom:12px;line-height:1.9;letter-spacing:1px">
+          Clé API gratuite sur <a href="https://www.alphavantage.co/support/#api-key" target="_blank" style="color:${c};text-decoration:none">alphavantage.co</a> → entre-la ici pour récupérer les vrais cours automatiquement.
+        </div>
+        <div class="api-row">
+          <input class="api-input" id="ak" type="text" placeholder="Clé Alpha Vantage..." value="${D.apiKey||''}" oninput="D.apiKey=this.value;save()"/>
+          <button class="btn btn-ghost" style="--tc:${c}" onclick="refresh()">↻ ACTUALISER LES COURS</button>
+          <span id="rs" style="font-size:9px;color:var(--muted);letter-spacing:1px"></span>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  if(editing!==null){ const el=document.getElementById('ei'); if(el){el.focus();el.select();} }
+}
+
+function sw(k){ user=k; editing=null; showNote=false; render(); }
+function startEdit(i){ editing=i; renderMain(); }
+function cancel(){ editing=null; renderMain(); }
+function commit(i){
+  const el=document.getElementById('ei'); if(!el) return;
+  const v=parseFloat(el.value);
+  if(!isNaN(v)&&v>=0){ D.portfolios[user].positions[i].current=v; save(); }
+  editing=null; render();
+}
+function toggleNote(){ showNote=!showNote; renderMain(); if(showNote){ const el=document.getElementById('nt'); if(el)el.focus(); } }
+function addNote(){
+  const el=document.getElementById('nt'); if(!el||!el.value.trim()) return;
+  if(!D.notes[user]) D.notes[user]=[];
+  D.notes[user].push({text:el.value.trim(), date:new Date().toLocaleDateString('fr-FR')});
+  save(); showNote=false; renderMain();
+}
+
+async function refresh(){
+  const ak = document.getElementById('ak')?.value;
+  const rs = document.getElementById('rs');
+  if(!ak||ak.length<8){ if(rs) rs.textContent='⚠ Clé API requise'; return; }
+  if(rs) rs.textContent='Récupération en cours...';
+  let n=0;
+  for(const [,port] of Object.entries(D.portfolios)){
+    for(const pos of port.positions){
+      if(!pos.real||!BASE[pos.real]) continue;
+      try{
+        const url=`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${pos.real}&apikey=${ak}`;
+        const res=await fetch(url); const json=await res.json();
+        const price=parseFloat(json['Global Quote']?.['05. price']);
+        if(!isNaN(price)&&price>0){ pos.current=parseFloat((pos.invested*(price/BASE[pos.real])).toFixed(2)); n++; }
+        await new Promise(r=>setTimeout(r,200));
+      }catch(e){}
+    }
+  }
+  save(); if(rs) rs.textContent=`✓ ${n} positions mises à jour`; render();
+}
+
+load(); render();
+</script>
+</body>
+</html>
