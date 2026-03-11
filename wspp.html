@@ -260,18 +260,19 @@ async function fetchPrices(){
   isRefreshing=true; setDot('loading');
   const tickers=new Set();
   for(const p of Object.values(D.portfolios)) for(const pos of p.positions){ const r=TICKER_MAP[pos.ticker]; if(r) tickers.add(r); }
+  const tickerArr=[...tickers];
+  const BATCH=7;
+  const delay=ms=>new Promise(r=>setTimeout(r,ms));
   try{
-    const res=await fetch(`https://api.twelvedata.com/price?symbol=${[...tickers].join(',')}&apikey=${API_KEY_TD}`);
-    const json=await res.json();
-    if(json.status==='error'){ setDot('error'); isRefreshing=false; return; }
-    let pm={};
-    if(tickers.size===1){ pm[[...tickers][0]]=parseFloat(json.price); }
-    else{ for(const [s,v] of Object.entries(json)) if(v&&v.price) pm[s]=parseFloat(v.price); }
-    // Sauvegarde les prix live
-    for(const [sym, price] of Object.entries(pm)){
-      if(!isNaN(price)) D.livePrices[sym]=price;
+    for(let b=0;b<tickerArr.length;b+=BATCH){
+      if(b>0) await delay(62000);
+      const batch=tickerArr.slice(b,b+BATCH);
+      const res=await fetch(`https://api.twelvedata.com/price?symbol=${batch.join(',')}&apikey=${API_KEY_TD}`);
+      const json=await res.json();
+      if(json.status==='error'){ console.log('API error:',json.message); continue; }
+      if(batch.length===1){ const p=parseFloat(json.price); if(!isNaN(p)) D.livePrices[batch[0]]=p; }
+      else{ for(const [s,v] of Object.entries(json)) if(v&&v.price){ const p=parseFloat(v.price); if(!isNaN(p)) D.livePrices[s]=p; } }
     }
-    // Applique les prix aux positions via la fonction centralisée
     applyLivePrices();
     saveData(); setDot('live');
     document.getElementById('lastUpdate').textContent=`Cours ${now()}`;
