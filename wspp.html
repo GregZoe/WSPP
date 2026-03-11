@@ -170,30 +170,30 @@ const DEFAULTS = {
       name:"Papa", emoji:"👨", profile:"Équilibré", color:"#3B82F6",
       capital:500, startDate:"2026-03-07",
       positions:[
-        {name:"ETF Défense Europe",   ticker:"DFEN", invested:150, current:150, sector:"Défense",      risk:"Moyen", purchasePrice:140},
-        {name:"ETF S&P 500",          ticker:"SP5",  invested:150, current:150, sector:"USA Large Cap", risk:"Moyen", purchasePrice:570},
-        {name:"ETF Obligations 1-3Y", ticker:"EMUG", invested:100, current:100, sector:"Obligations",   risk:"Faible", purchasePrice:82},
-        {name:"ETF Stoxx 600 Europe", ticker:"STOX", invested:100, current:100, sector:"Europe",        risk:"Moyen", purchasePrice:67},
+        {name:"ETF Défense Europe",   ticker:"DFEN", invested:150, current:150, sector:"Défense",      risk:"Moyen"},
+        {name:"ETF S&P 500",          ticker:"SP5",  invested:150, current:150, sector:"USA Large Cap", risk:"Moyen"},
+        {name:"ETF Obligations 1-3Y", ticker:"EMUG", invested:100, current:100, sector:"Obligations",   risk:"Faible"},
+        {name:"ETF Stoxx 600 Europe", ticker:"STOX", invested:100, current:100, sector:"Europe",        risk:"Moyen"},
       ]
     },
     nayla: {
       name:"Nayla", emoji:"👧", profile:"Croissance", color:"#8B5CF6",
       capital:500, startDate:"2026-03-07",
       positions:[
-        {name:"ETF IA & Robotique",    ticker:"AIAI", invested:200, current:200, sector:"Tech / IA",     risk:"Élevé", purchasePrice:28},
-        {name:"ETF Nasdaq 100",        ticker:"NDXQ", invested:150, current:150, sector:"Tech USA",      risk:"Élevé", purchasePrice:490},
-        {name:"ETF Énergie Propre",    ticker:"CLNE", invested:100, current:100, sector:"Énergie verte", risk:"Moyen", purchasePrice:14},
-        {name:"ETF Marchés Émergents", ticker:"EMRG", invested:50,  current:50,  sector:"Émergents",     risk:"Élevé", purchasePrice:44},
+        {name:"ETF IA & Robotique",    ticker:"AIAI", invested:200, current:200, sector:"Tech / IA",     risk:"Élevé"},
+        {name:"ETF Nasdaq 100",        ticker:"NDXQ", invested:150, current:150, sector:"Tech USA",      risk:"Élevé"},
+        {name:"ETF Énergie Propre",    ticker:"CLNE", invested:100, current:100, sector:"Énergie verte", risk:"Moyen"},
+        {name:"ETF Marchés Émergents", ticker:"EMRG", invested:50,  current:50,  sector:"Émergents",     risk:"Élevé"},
       ]
     },
     hannan: {
       name:"Hannan", emoji:"👩", profile:"Défensif", color:"#10B981",
       capital:500, startDate:"2026-03-07",
       positions:[
-        {name:"ETF Obligations Souv.", ticker:"GOVT", invested:200, current:200, sector:"Obligations", risk:"Faible", purchasePrice:72},
-        {name:"ETF Dividendes Europe", ticker:"DIVD", invested:150, current:150, sector:"Dividendes",  risk:"Faible", purchasePrice:122},
-        {name:"ETF Santé Mondial",     ticker:"HLTH", invested:100, current:100, sector:"Santé",       risk:"Faible", purchasePrice:262},
-        {name:"ETF Stoxx 600 Europe",  ticker:"STOX", invested:50,  current:50,  sector:"Europe",      risk:"Moyen", purchasePrice:67},
+        {name:"ETF Obligations Souv.", ticker:"GOVT", invested:200, current:200, sector:"Obligations", risk:"Faible"},
+        {name:"ETF Dividendes Europe", ticker:"DIVD", invested:150, current:150, sector:"Dividendes",  risk:"Faible"},
+        {name:"ETF Santé Mondial",     ticker:"HLTH", invested:100, current:100, sector:"Santé",       risk:"Faible"},
+        {name:"ETF Stoxx 600 Europe",  ticker:"STOX", invested:50,  current:50,  sector:"Europe",      risk:"Moyen"},
       ]
     }
   },
@@ -240,11 +240,8 @@ async function fetchPrices(){
     else{ for(const [s,v] of Object.entries(json)) if(v&&v.price) pm[s]=parseFloat(v.price); }
     for(const port of Object.values(D.portfolios)){
       for(const pos of port.positions){
-        const real=TICKER_MAP[pos.ticker], np=pm[real];
-        if(np&&pos.purchasePrice&&!isNaN(np)){ 
-          pos.current=parseFloat((pos.invested*(np/pos.purchasePrice)).toFixed(2)); 
-          D.livePrices[real]=np; 
-        }
+        const real=TICKER_MAP[pos.ticker], np=pm[real], bp=BASE_PRICES[real];
+        if(np&&bp&&!isNaN(np)){ pos.current=parseFloat((pos.invested*(np/bp)).toFixed(2)); D.livePrices[real]=np; }
       }
     }
     saveData(); setDot('live');
