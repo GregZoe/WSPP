@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WSPP — Wall Street Pour les Pauvres</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#07070D;--bg2:rgba(255,255,255,0.025);
+    --border:#15152A;--border2:#0D0D1E;
+    --text:#D8D8F0;--muted:#44445A;--muted2:#22223A;
+    --green:#4ADE80;--red:#F87171;--yellow:#FBBF24;
+  }
+  body{background:var(--bg);color:var(--text);font-family:'DM Mono','Courier New',monospace;min-height:100vh;font-size:13px}
+  ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:#1A1A2E}
+
+  header{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid var(--border);background:rgba(255,255,255,0.015);position:sticky;top:0;z-index:100;backdrop-filter:blur(20px)}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:4px;background:linear-gradient(135deg,#4ADE80,#22D3EE);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .logo-sub{font-size:9px;letter-spacing:3px;color:var(--muted2);padding-top:2px}
+  .header-right{display:flex;align-items:center;gap:14px}
+  .live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+  .live-dot.loading{background:var(--yellow);animation:pulse 0.5s infinite}
+  .live-dot.error{background:var(--red);animation:none}
+  .hdr-info{font-size:10px;color:var(--muted);letter-spacing:1px}
+  .saved-msg{font-size:10px;color:var(--green);letter-spacing:1px;opacity:0;transition:opacity 0.3s}
+  .saved-msg.show{opacity:1}
+  .countdown{font-size:9px;color:var(--muted2);letter-spacing:1px}
+
+  .tabs{display:flex;gap:14px;padding:22px 32px 0;flex-wrap:wrap}
+  .tab{padding:16px 22px;border-radius:12px;border:1.5px solid var(--border);background:var(--bg2);cursor:pointer;min-width:155px;transition:all 0.2s;user-select:none}
+  .tab:hover{transform:translateY(-2px)}
+  .tab.active{border-color:var(--tc);background:color-mix(in srgb,var(--tc) 12%,transparent)}
+  .tab-emoji{font-size:20px;margin-bottom:4px}
+  .tab-name{font-size:13px;font-weight:500;letter-spacing:1px;color:var(--muted)}
+  .tab.active .tab-name{color:var(--tc)}
+  .tab-profile{font-size:9px;letter-spacing:2px;color:var(--muted2);margin-bottom:8px}
+  .tab-value{font-size:15px;font-weight:500}
+  .tab-pnl{font-size:10px;letter-spacing:1px;margin-top:2px}
+
+  main{padding:22px 32px}
+  .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+  .stat-card{padding:18px 22px;background:var(--bg2);border-radius:12px;border:1px solid var(--border)}
+  .stat-label{font-size:9px;letter-spacing:2px;color:var(--muted2);margin-bottom:8px}
+  .stat-value{font-size:20px;font-weight:500;letter-spacing:1px}
+  .stat-sub{font-size:10px;color:var(--muted);margin-top:4px}
+
+  .panel{background:var(--bg2);border-radius:12px;border:1px solid var(--border);overflow:hidden;margin-bottom:16px}
+  .panel-header{padding:14px 22px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between}
+  .panel-title{font-size:9px;letter-spacing:2px;color:var(--muted)}
+  .panel-hint{font-size:9px;color:var(--muted2);letter-spacing:1px}
+
+  .table-head{display:grid;grid-template-columns:2fr 0.8fr 0.8fr 0.8fr 1.4fr 0.7fr;padding:9px 22px;border-bottom:1px solid var(--border2);font-size:9px;letter-spacing:2px;color:var(--muted2)}
+  .ta-r{text-align:right}.ta-c{text-align:center}
+
+  .pos-row{display:grid;grid-template-columns:2fr 0.8fr 0.8fr 0.8fr 1.4fr 0.7fr;padding:13px 22px;border-bottom:1px solid var(--border2);align-items:center;transition:background 0.15s}
+  .pos-row:last-child{border-bottom:none}
+  .pos-row:hover{background:rgba(255,255,255,0.03)}
+  .pos-name{font-size:12px;color:#C0C0DC}
+  .pos-meta{font-size:9px;color:var(--muted2);margin-top:3px;letter-spacing:1px}
+
+  /* AI SIGNAL CELL */
+  .ai-cell{display:flex;flex-direction:column;gap:3px}
+  .ai-horizon{display:flex;align-items:center;gap:5px;font-size:9px}
+  .ai-label{color:var(--muted2);width:14px}
+  .ai-bar-wrap{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+  .ai-bar{height:100%;border-radius:2px;transition:width 0.5s ease}
+  .ai-bar.up{background:var(--green)}
+  .ai-bar.down{background:var(--red)}
+  .ai-conf{font-size:9px;min-width:32px;text-align:right}
+  .ai-conf.up{color:var(--green)}
+  .ai-conf.down{color:var(--red)}
+  .ai-loading{font-size:9px;color:var(--muted2);letter-spacing:1px}
+
+  .badge{font-size:9px;letter-spacing:1px;padding:3px 9px;border-radius:20px;display:inline-block}
+  .badge-low{background:rgba(74,222,128,0.1);color:#4ADE80;border:1px solid rgba(74,222,128,0.25)}
+  .badge-med{background:rgba(251,191,36,0.1);color:#FBBF24;border:1px solid rgba(251,191,36,0.25)}
+  .badge-high{background:rgba(248,113,113,0.1);color:#F87171;border:1px solid rgba(248,113,113,0.25)}
+
+  .bar-wrap{display:flex;height:7px;border-radius:4px;overflow:hidden;gap:2px;margin-bottom:10px}
+  .bar-legend{display:flex;gap:14px;flex-wrap:wrap}
+  .bar-legend-item{display:flex;align-items:center;gap:6px}
+  .bar-dot{width:7px;height:7px;border-radius:2px}
+  .bar-label{font-size:9px;color:var(--muted)}
+
+  /* AI PANEL */
+  .ai-status-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 22px;background:var(--border2);font-size:9px;letter-spacing:1px}
+  .ai-status-left{color:var(--muted2)}
+  .ai-on{color:var(--green)}
+  .ai-off{color:var(--red)}
+
+  /* TOP PICKS */
+  .picks-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:18px 22px}
+  .pick-card{padding:14px 16px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid var(--border2)}
+  .pick-title{font-size:9px;letter-spacing:2px;color:var(--muted2);margin-bottom:10px}
+  .pick-item{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--border2)}
+  .pick-item:last-child{border-bottom:none}
+  .pick-name{font-size:11px;color:#C0C0DC}
+  .pick-meta{font-size:9px;color:var(--muted2);margin-top:1px}
+  .pick-conf{font-size:11px;font-weight:500}
+
+  .note-add-row{display:flex;gap:8px;margin-bottom:12px}
+  .note-input{flex:1;background:#0A0A18;border:1px solid var(--border);border-radius:8px;color:var(--text);padding:8px 14px;font-size:11px;font-family:inherit;outline:none}
+  .note-input:focus{border-color:var(--tc,#4ADE80)}
+  .btn{padding:8px 16px;border-radius:8px;border:none;font-family:inherit;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all 0.15s}
+  .btn-primary{background:var(--tc,#4ADE80);color:#000;font-weight:700}
+  .btn-ghost{background:transparent;border:1px solid color-mix(in srgb,var(--tc,#4ADE80) 40%,transparent);color:var(--tc,#4ADE80)}
+  .btn-ghost:disabled{opacity:0.4;cursor:not-allowed}
+  .note-list{display:flex;flex-direction:column;gap:7px}
+  .note-item{display:flex;gap:12px;align-items:flex-start}
+  .note-date{font-size:9px;color:var(--muted2);min-width:68px;padding-top:2px}
+  .note-text{font-size:11px;color:#7070A0}
+  .no-notes{font-size:11px;color:var(--muted2);font-style:italic}
+
+  .status-bar{display:flex;align-items:center;justify-content:space-between;padding:10px 22px;background:var(--border2);font-size:9px;letter-spacing:1px}
+  .up{color:var(--green)}.down{color:var(--red)}
+  footer{text-align:center;font-size:9px;color:var(--muted2);letter-spacing:2px;padding:16px 32px 24px}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .fade-in{animation:fadeIn 0.3s ease}
+  @media(max-width:800px){
+    .stats-grid{grid-template-columns:1fr 1fr}
+    .table-head,.pos-row{grid-template-columns:2fr 1fr 1fr 1fr}
+    .col-hide{display:none}
+    header,.tabs,main{padding-left:16px;padding-right:16px}
+    .picks-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div style="display:flex;align-items:center;gap:16px">
+    <div><div class="logo">WSPP</div><div class="logo-sub">WALL STREET POUR LES PAUVRES</div></div>
+  </div>
+  <div class="header-right">
+    <span class="saved-msg" id="savedMsg">✓ SAUVEGARDÉ</span>
+    <div class="live-dot" id="liveDot"></div>
+    <div class="hdr-info" id="lastUpdate">Connexion...</div>
+    <div class="countdown" id="countdown"></div>
+  </div>
+</header>
+<div class="tabs" id="tabs"></div>
+<main id="main"></main>
+<footer>SIMULATION PÉDAGOGIQUE · PAS UN CONSEIL EN INVESTISSEMENT · LES MARCHÉS COMPORTENT DES RISQUES DE PERTE EN CAPITAL</footer>
+
+<script>
+// ═══════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════
+const STORAGE_KEY   = 'wspp_v5';
+const API_KEY_TD    = 'e6ec26e5f3394dc996cc0b27b56d060a'; // Twelve Data
+const ML_API        = 'http://localhost:5001';             // Serveur IA local
+const REFRESH_SECS  = 300;
+
+const TICKER_MAP = {
+  DFEN:'ITA', SP5:'SPY', EMUG:'SHY', STOX:'VGK',
+  AIAI:'BOTZ', NDXQ:'QQQ', CLNE:'ICLN', EMRG:'VWO',
+  GOVT:'BND', DIVD:'VYM', HLTH:'VHT'
+};
+const BASE_PRICES = {
+  ITA:140, SPY:570, SHY:82, VGK:67, BOTZ:28,
+  QQQ:490, ICLN:14, VWO:44, BND:72, VYM:122, VHT:262
+};
+const SEG_COLORS = ['#3B82F6','#22D3EE','#F59E0B','#EC4899','#8B5CF6','#10B981'];
+
+const DEFAULTS = {
+  portfolios: {
+    papa: {
+      name:"Papa", emoji:"👨", profile:"Équilibré", color:"#3B82F6",
+      capital:500, startDate:"2026-03-07",
+      positions:[
+        {name:"ETF Défense Europe",   ticker:"DFEN", invested:150, current:150, sector:"Défense",      risk:"Moyen", purchasePrice:140},
+        {name:"ETF S&P 500",          ticker:"SP5",  invested:150, current:150, sector:"USA Large Cap", risk:"Moyen", purchasePrice:570},
+        {name:"ETF Obligations 1-3Y", ticker:"EMUG", invested:100, current:100, sector:"Obligations",   risk:"Faible", purchasePrice:82},
+        {name:"ETF Stoxx 600 Europe", ticker:"STOX", invested:100, current:100, sector:"Europe",        risk:"Moyen", purchasePrice:67},
+      ]
+    },
+    nayla: {
+      name:"Nayla", emoji:"👧", profile:"Croissance", color:"#8B5CF6",
+      capital:500, startDate:"2026-03-07",
+      positions:[
+        {name:"ETF IA & Robotique",    ticker:"AIAI", invested:200, current:200, sector:"Tech / IA",     risk:"Élevé", purchasePrice:28},
+        {name:"ETF Nasdaq 100",        ticker:"NDXQ", invested:150, current:150, sector:"Tech USA",      risk:"Élevé", purchasePrice:490},
+        {name:"ETF Énergie Propre",    ticker:"CLNE", invested:100, current:100, sector:"Énergie verte", risk:"Moyen", purchasePrice:14},
+        {name:"ETF Marchés Émergents", ticker:"EMRG", invested:50,  current:50,  sector:"Émergents",     risk:"Élevé", purchasePrice:44},
+      ]
+    },
+    hannan: {
+      name:"Hannan", emoji:"👩", profile:"Défensif", color:"#10B981",
+      capital:500, startDate:"2026-03-07",
+      positions:[
+        {name:"ETF Obligations Souv.", ticker:"GOVT", invested:200, current:200, sector:"Obligations", risk:"Faible", purchasePrice:72},
+        {name:"ETF Dividendes Europe", ticker:"DIVD", invested:150, current:150, sector:"Dividendes",  risk:"Faible", purchasePrice:122},
+        {name:"ETF Santé Mondial",     ticker:"HLTH", invested:100, current:100, sector:"Santé",       risk:"Faible", purchasePrice:262},
+        {name:"ETF Stoxx 600 Europe",  ticker:"STOX", invested:50,  current:50,  sector:"Europe",      risk:"Moyen", purchasePrice:67},
+      ]
+    }
+  },
+  notes:{ papa:[], nayla:[], hannan:[] },
+  livePrices:{},
+  aiPredictions: null,
+  aiLastUpdate: null
+};
+
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+let D = JSON.parse(JSON.stringify(DEFAULTS));
+let user='papa', showNote=false, isRefreshing=false, secondsLeft=REFRESH_SECS;
+
+function loadData(){ try{ const r=localStorage.getItem(STORAGE_KEY); if(r) D=Object.assign({},DEFAULTS,JSON.parse(r)); }catch(e){} }
+function saveData(){ localStorage.setItem(STORAGE_KEY,JSON.stringify(D)); const m=document.getElementById('savedMsg'); if(m){m.classList.add('show');setTimeout(()=>m.classList.remove('show'),2000);} }
+
+const eur = v => new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:2}).format(v);
+const pct = v => (v>=0?'+':'')+v.toFixed(2)+'%';
+const cls = v => v>=0?'up':'down';
+const now = () => new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+const fmtCD = s => { const m=Math.floor(s/60),sec=s%60; return `↻ ${m}:${String(sec).padStart(2,'0')}`; };
+
+function badge(r){
+  if(r==='Faible') return '<span class="badge badge-low">Faible</span>';
+  if(r==='Moyen')  return '<span class="badge badge-med">Moyen</span>';
+  return '<span class="badge badge-high">Élevé</span>';
+}
+
+// ═══════════════════════════════════════════════
+// TWELVE DATA — PRIX EN LIVE
+// ═══════════════════════════════════════════════
+async function fetchPrices(){
+  isRefreshing=true; setDot('loading');
+  const tickers=new Set();
+  for(const p of Object.values(D.portfolios)) for(const pos of p.positions){ const r=TICKER_MAP[pos.ticker]; if(r) tickers.add(r); }
+  try{
+    const res=await fetch(`https://api.twelvedata.com/price?symbol=${[...tickers].join(',')}&apikey=${API_KEY_TD}`);
+    const json=await res.json();
+    if(json.status==='error'){ setDot('error'); isRefreshing=false; return; }
+    let pm={};
+    if(tickers.size===1){ pm[[...tickers][0]]=parseFloat(json.price); }
+    else{ for(const [s,v] of Object.entries(json)) if(v&&v.price) pm[s]=parseFloat(v.price); }
+    for(const port of Object.values(D.portfolios)){
+      for(const pos of port.positions){
+        const real=TICKER_MAP[pos.ticker], np=pm[real];
+        if(np&&pos.purchasePrice&&!isNaN(np)){ 
+          pos.current=parseFloat((pos.invested*(np/pos.purchasePrice)).toFixed(2)); 
+          D.livePrices[real]=np; 
+        }
+      }
+    }
+    saveData(); setDot('live');
+    document.getElementById('lastUpdate').textContent=`Cours ${now()}`;
+  }catch(e){ setDot('error'); }
+  isRefreshing=false;
+}
+
+// ═══════════════════════════════════════════════
+// ML API — PRÉDICTIONS IA
+// ═══════════════════════════════════════════════
+async function fetchAIPredictions(){
+  try{
+    const res = await fetch(`${ML_API}/predictions`);
+    const json = await res.json();
+    if(json.status==='ok'){
+      D.aiPredictions  = json.data;
+      D.aiLastUpdate   = now();
+      saveData();
+      console.log('✅ Prédictions IA chargées');
+    }
+  }catch(e){
+    console.log('⚠️ Serveur IA non disponible (lance python3 api.py)');
+  }
+}
+
+function getAISignal(ticker){
+  if(!D.aiPredictions) return null;
+  const real = TICKER_MAP[ticker];
+  if(!real) return null;
+  for(const market of Object.values(D.aiPredictions)){
+    if(market[real]) return market[real].horizons;
+  }
+  return null;
+}
+
+function renderAICell(ticker){
+  const horizons = getAISignal(ticker);
+  if(!horizons) return `<div class="ai-loading">IA hors ligne</div>`;
+
+  const labels = ['1j','3j','5j','10j'];
+  const keys   = ['1d','3d','5d','10d'];
+  return keys.map((k,i) => {
+    const h = horizons[k];
+    if(!h) return '';
+    const isUp = h.prediction==='up';
+    const conf = h.confidence;
+    return `<div class="ai-horizon">
+      <span class="ai-label">${labels[i]}</span>
+      <div class="ai-bar-wrap">
+        <div class="ai-bar ${isUp?'up':'down'}" style="width:${conf}%"></div>
+      </div>
+      <span class="ai-conf ${isUp?'up':'down'}">${isUp?'▲':'▼'}${conf}%</span>
+    </div>`;
+  }).join('');
+}
+
+// Top picks depuis les prédictions IA
+function getTopPicks(){
+  if(!D.aiPredictions) return {up:[],down:[]};
+  const all=[];
+  for(const [market, assets] of Object.entries(D.aiPredictions)){
+    for(const [ticker, r] of Object.entries(assets)){
+      const h=r.horizons?.['5d'];
+      if(h) all.push({ticker,name:r.name,market,prediction:h.prediction,confidence:h.confidence,accuracy:h.accuracy});
+    }
+  }
+  all.sort((a,b)=>b.confidence-a.confidence);
+  return {
+    up:   all.filter(x=>x.prediction==='up').slice(0,5),
+    down: all.filter(x=>x.prediction==='down').slice(0,5)
+  };
+}
+
+// ═══════════════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════════════
+function setDot(s){ const d=document.getElementById('liveDot'); if(!d)return; d.className='live-dot'; if(s==='loading')d.classList.add('loading'); if(s==='error')d.classList.add('error'); }
+
+function render(){ renderTabs(); renderMain(); }
+
+function renderTabs(){
+  document.getElementById('tabs').innerHTML=Object.keys(D.portfolios).map(k=>{
+    const p=D.portfolios[k];
+    const tot=p.positions.reduce((s,x)=>s+x.current,0);
+    const inv=p.positions.reduce((s,x)=>s+x.invested,0);
+    const pnl=tot-inv;
+    return `<div class="tab ${k===user?'active':''}" style="--tc:${p.color}" onclick="sw('${k}')">
+      <div class="tab-emoji">${p.emoji}</div>
+      <div class="tab-name">${p.name}</div>
+      <div class="tab-profile">${p.profile.toUpperCase()}</div>
+      <div class="tab-value">${eur(tot)}</div>
+      <div class="tab-pnl ${cls(pnl)}">${pnl>=0?'▲':'▼'} ${eur(Math.abs(pnl))}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderMain(){
+  const p=D.portfolios[user];
+  const tot=p.positions.reduce((s,x)=>s+x.current,0);
+  const inv=p.positions.reduce((s,x)=>s+x.invested,0);
+  const gpnl=tot-inv, gpct=(gpnl/inv)*100, c=p.color;
+  const notes=D.notes[user]||[];
+  const aiOn=!!D.aiPredictions;
+  const picks=getTopPicks();
+
+  const bars=p.positions.map((pos,i)=>`<div style="width:${(pos.invested/inv*100).toFixed(1)}%;background:${SEG_COLORS[i]};border-radius:2px"></div>`).join('');
+  const legend=p.positions.map((pos,i)=>`<div class="bar-legend-item"><div class="bar-dot" style="background:${SEG_COLORS[i]}"></div><span class="bar-label">${pos.ticker} ${(pos.invested/inv*100).toFixed(0)}%</span></div>`).join('');
+
+  const rows=p.positions.map(pos=>{
+    const pnl=pos.current-pos.invested, pp=(pnl/pos.invested)*100;
+    const real=TICKER_MAP[pos.ticker], lp=D.livePrices[real];
+    return `<div class="pos-row">
+      <div>
+        <div class="pos-name">${pos.name}</div>
+        <div class="pos-meta">${pos.ticker} · ${pos.sector}${lp?` · <span style="color:var(--green)">$${lp.toFixed(2)}</span>`:''}</div>
+      </div>
+      <div class="ta-r" style="color:#7070A0">${eur(pos.invested)}</div>
+      <div class="ta-r">${eur(pos.current)}</div>
+      <div class="ta-r ${cls(pnl)}" style="font-weight:500">${pnl>=0?'+':''}${eur(pnl)}</div>
+      <div class="ai-cell">${renderAICell(pos.ticker)}</div>
+      <div class="ta-c col-hide">${badge(pos.risk)}</div>
+    </div>`;
+  }).join('');
+
+  const noteHtml=notes.length===0
+    ?`<div class="no-notes">Aucune note.</div>`
+    :`<div class="note-list">${notes.map(n=>`<div class="note-item"><div class="note-date">${n.date}</div><div class="note-text">${n.text}</div></div>`).join('')}</div>`;
+
+  // TOP PICKS HTML
+  const pickUp   = picks.up.map(x=>`<div class="pick-item"><div><div class="pick-name">${x.name}</div><div class="pick-meta">${x.ticker} · ${x.market.toUpperCase()}</div></div><div class="pick-conf up">▲ ${x.confidence}%</div></div>`).join('') || '<div class="no-notes">Chargement...</div>';
+  const pickDown = picks.down.map(x=>`<div class="pick-item"><div><div class="pick-name">${x.name}</div><div class="pick-meta">${x.ticker} · ${x.market.toUpperCase()}</div></div><div class="pick-conf down">▼ ${x.confidence}%</div></div>`).join('') || '<div class="no-notes">Chargement...</div>';
+
+  document.getElementById('main').innerHTML=`<div class="fade-in" style="--tc:${c}">
+
+    <!-- STATUS BARS -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">⚡ COURS EN LIVE · TWELVE DATA</div>
+          <button class="btn btn-ghost" style="--tc:${c}" onclick="fetchPrices().then(render)">↻</button>
+        </div>
+        <div class="status-bar" style="padding:10px 22px;background:var(--border2);font-size:9px;letter-spacing:1px;display:flex;justify-content:space-between">
+          <span style="color:var(--green)">🟢 Connecté · MAJ toutes les 5min</span>
+          <span style="color:var(--muted2)">Marché US 15h30–22h00</span>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-title">🤖 IA PRÉDICTIONS · RANDOM FOREST</div>
+          <button class="btn btn-ghost" style="--tc:${c}" onclick="fetchAIPredictions().then(render)">↻</button>
+        </div>
+        <div class="status-bar" style="padding:10px 22px;background:var(--border2);font-size:9px;letter-spacing:1px;display:flex;justify-content:space-between">
+          <span class="${aiOn?'ai-on':'ai-off'}">${aiOn?`🟢 76 actifs analysés · MAJ ${D.aiLastUpdate}`:'🔴 Serveur IA hors ligne → lance python3 api.py'}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">CAPITAL DE DÉPART</div><div class="stat-value" style="color:#7070A0">${eur(p.capital)}</div><div class="stat-sub">${p.startDate}</div></div>
+      <div class="stat-card"><div class="stat-label">VALEUR ACTUELLE</div><div class="stat-value">${eur(tot)}</div><div class="stat-sub">${p.positions.length} positions</div></div>
+      <div class="stat-card"><div class="stat-label">GAIN / PERTE</div><div class="stat-value ${cls(gpnl)}">${gpnl>=0?'+':''}${eur(gpnl)}</div><div class="stat-sub ${cls(gpct)}">${pct(gpct)}</div></div>
+      <div class="stat-card"><div class="stat-label">PROFIL</div><div class="stat-value" style="color:${c};font-size:16px">${p.profile.toUpperCase()}</div><div class="stat-sub">${p.emoji} ${p.name}</div></div>
+    </div>
+
+    <!-- POSITIONS -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">POSITIONS</div>
+        <div class="panel-hint">🤖 Signaux IA 1j · 3j · 5j · 10j</div>
+      </div>
+      <div class="table-head">
+        <div>ACTIF</div>
+        <div class="ta-r">INVESTI</div>
+        <div class="ta-r">ACTUEL</div>
+        <div class="ta-r">P&L</div>
+        <div>SIGNAL IA</div>
+        <div class="ta-c col-hide">RISQUE</div>
+      </div>
+      ${rows}
+    </div>
+
+    <!-- TOP PICKS IA -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">🤖 TOP OPPORTUNITÉS IA · HORIZON 5 JOURS · 76 ACTIFS</div>
+        <div class="panel-hint">ETFs + CAC40 + Dow Jones</div>
+      </div>
+      <div class="picks-grid">
+        <div class="pick-card">
+          <div class="pick-title">🟢 TOP 5 HAUSSES PRÉVUES</div>
+          ${pickUp}
+        </div>
+        <div class="pick-card">
+          <div class="pick-title">🔴 TOP 5 À SURVEILLER</div>
+          ${pickDown}
+        </div>
+      </div>
+    </div>
+
+    <!-- RÉPARTITION -->
+    <div class="panel" style="padding:18px 22px">
+      <div class="panel-title" style="margin-bottom:12px">RÉPARTITION</div>
+      <div class="bar-wrap">${bars}</div>
+      <div class="bar-legend">${legend}</div>
+    </div>
+
+    <!-- JOURNAL -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">JOURNAL DE ${p.name.toUpperCase()}</div>
+        <button class="btn btn-ghost" style="--tc:${c}" onclick="toggleNote()">+ NOTE</button>
+      </div>
+      <div style="padding:16px 22px">
+        <div id="ni" style="display:${showNote?'block':'none'};margin-bottom:12px">
+          <div class="note-add-row">
+            <input class="note-input" id="nt" placeholder="Ex: Signal IA haussier sur LVMH, à surveiller..." onkeydown="if(event.key==='Enter')addNote()"/>
+            <button class="btn btn-primary" style="--tc:${c}" onclick="addNote()">OK</button>
+          </div>
+        </div>
+        ${noteHtml}
+      </div>
+    </div>
+  </div>`;
+
+  if(showNote){ const el=document.getElementById('nt'); if(el)el.focus(); }
+}
+
+// ═══════════════════════════════════════════════
+// ACTIONS
+// ═══════════════════════════════════════════════
+function sw(k){ user=k; showNote=false; render(); }
+function toggleNote(){ showNote=!showNote; renderMain(); }
+function addNote(){
+  const el=document.getElementById('nt'); if(!el||!el.value.trim()) return;
+  if(!D.notes[user]) D.notes[user]=[];
+  D.notes[user].push({text:el.value.trim(),date:new Date().toLocaleDateString('fr-FR')});
+  saveData(); showNote=false; renderMain();
+}
+
+// ═══════════════════════════════════════════════
+// AUTO REFRESH
+// ═══════════════════════════════════════════════
+function startAutoRefresh(){
+  setInterval(()=>{
+    secondsLeft--;
+    const el=document.getElementById('countdown');
+    if(el) el.textContent=fmtCD(secondsLeft);
+    if(secondsLeft<=0){ secondsLeft=REFRESH_SECS; fetchPrices().then(render); }
+  },1000);
+}
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+loadData();
+render();
+document.getElementById('lastUpdate').textContent='Chargement...';
+
+// Charger prix + prédictions IA en parallèle
+Promise.all([fetchPrices(), fetchAIPredictions()]).then(()=>{
+  render();
+  startAutoRefresh();
+});
+</script>
+</body>
+</html>
