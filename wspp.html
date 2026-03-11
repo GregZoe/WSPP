@@ -135,6 +135,7 @@
   </div>
   <div class="header-right">
     <span class="saved-msg" id="savedMsg">✓ SAUVEGARDÉ</span>
+    <button class="btn btn-ghost" style="font-size:9px;padding:4px 10px;--tc:#F87171" onclick="if(confirm('Vider le cache et recharger ?')){localStorage.removeItem('wspp_v5');location.reload();}" title="Reset cache">⟳ RESET</button>
     <div class="live-dot" id="liveDot"></div>
     <div class="hdr-info" id="lastUpdate">Connexion...</div>
     <div class="countdown" id="countdown"></div>
@@ -209,7 +210,35 @@ const DEFAULTS = {
 let D = JSON.parse(JSON.stringify(DEFAULTS));
 let user='papa', showNote=false, isRefreshing=false, secondsLeft=REFRESH_SECS;
 
-function loadData(){ try{ const r=localStorage.getItem(STORAGE_KEY); if(r) D=Object.assign({},DEFAULTS,JSON.parse(r)); }catch(e){} }
+function applyLivePrices(){
+  for(const port of Object.values(D.portfolios)){
+    for(const pos of port.positions){
+      const real=TICKER_MAP[pos.ticker];
+      const np=D.livePrices[real];
+      const bp=BASE_PRICES[real];
+      if(np&&bp&&!isNaN(np)){
+        pos.current=parseFloat((pos.invested*(np/bp)).toFixed(2));
+      }
+    }
+  }
+}
+
+function loadData(){
+  try{
+    const r=localStorage.getItem(STORAGE_KEY);
+    if(r){
+      const saved=JSON.parse(r);
+      // Repart toujours des DEFAULTS pour les positions (évite données corrompues)
+      D=JSON.parse(JSON.stringify(DEFAULTS));
+      if(saved.notes) D.notes=saved.notes;
+      if(saved.livePrices) D.livePrices=saved.livePrices;
+      if(saved.aiPredictions) D.aiPredictions=saved.aiPredictions;
+      if(saved.aiLastUpdate) D.aiLastUpdate=saved.aiLastUpdate;
+      // Applique les derniers prix connus aux positions
+      applyLivePrices();
+    }
+  }catch(e){}
+}
 function saveData(){ localStorage.setItem(STORAGE_KEY,JSON.stringify(D)); const m=document.getElementById('savedMsg'); if(m){m.classList.add('show');setTimeout(()=>m.classList.remove('show'),2000);} }
 
 const eur = v => new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',minimumFractionDigits:2}).format(v);
@@ -238,15 +267,15 @@ async function fetchPrices(){
     let pm={};
     if(tickers.size===1){ pm[[...tickers][0]]=parseFloat(json.price); }
     else{ for(const [s,v] of Object.entries(json)) if(v&&v.price) pm[s]=parseFloat(v.price); }
-    for(const port of Object.values(D.portfolios)){
-      for(const pos of port.positions){
-        const real=TICKER_MAP[pos.ticker], np=pm[real], bp=BASE_PRICES[real];
-        if(np&&bp&&!isNaN(np)){ pos.current=parseFloat((pos.invested*(np/bp)).toFixed(2)); D.livePrices[real]=np; }
-      }
+    // Sauvegarde les prix live
+    for(const [sym, price] of Object.entries(pm)){
+      if(!isNaN(price)) D.livePrices[sym]=price;
     }
+    // Applique les prix aux positions via la fonction centralisée
+    applyLivePrices();
     saveData(); setDot('live');
     document.getElementById('lastUpdate').textContent=`Cours ${now()}`;
-  }catch(e){ setDot('error'); }
+  }catch(e){ setDot('error'); console.log('Erreur fetchPrices:',e); }
   isRefreshing=false;
 }
 
