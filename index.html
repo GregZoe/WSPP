@@ -1,323 +1,291 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Richch — Investis comme un pro</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
-  <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{
-      --bg:#050a14;--bg2:#0a1628;--bg3:#0d1f3c;
-      --red:#e53e3e;--red2:#fc5c5c;
-      --green:#10b981;--amber:#f59e0b;--blue:#3b82f6;--purple:#a855f7;
-      --w80:rgba(255,255,255,.8);--w60:rgba(255,255,255,.6);
-      --w40:rgba(255,255,255,.4);--w25:rgba(255,255,255,.25);
-      --w10:rgba(255,255,255,.1);--w05:rgba(255,255,255,.05);
-    }
-    html{scroll-behavior:smooth}
-    body{background:var(--bg);color:#fff;font-family:'DM Sans',sans-serif;overflow-x:hidden;line-height:1.6}
-    .mono{font-family:'DM Mono',monospace}
-    .container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
-    .g-card{background:linear-gradient(135deg,rgba(229,62,62,.07),rgba(10,22,40,.85));border:1px solid rgba(229,62,62,.15);border-radius:1rem}
-    .card-lift{transition:transform .2s,box-shadow .2s}
-    .card-lift:hover{transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.5)}
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Richch</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#050a14;--bg2:#0a1628;--bg3:#0d1f3c;
+  --red:#e53e3e;--red2:#fc5c5c;
+  --green:#10b981;--amber:#f59e0b;--blue:#3b82f6;--purple:#a855f7;
+  --w05:rgba(255,255,255,.05);--w10:rgba(255,255,255,.1);
+  --w25:rgba(255,255,255,.25);--w40:rgba(255,255,255,.4);--w60:rgba(255,255,255,.6);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:#fff;font-family:'DM Sans',sans-serif;overflow-x:hidden}
+.mono{font-family:'DM Mono',monospace}
+.container{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+.up{color:var(--green)}.down{color:var(--red)}
 
-    @keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-    @keyframes glow-red{0%,100%{box-shadow:0 0 20px rgba(229,62,62,.3)}50%{box-shadow:0 0 45px rgba(229,62,62,.65)}}
-    @keyframes fade-up{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-    @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-    @keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:.3}}
-    @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+/* cards */
+.g-card{background:linear-gradient(135deg,rgba(229,62,62,.07),rgba(10,22,40,.9));border:1px solid rgba(229,62,62,.15);border-radius:1rem}
+.dark-card{background:var(--bg2);border:1px solid var(--w05);border-radius:.875rem}
+.card-lift{transition:transform .2s,box-shadow .2s}
+.card-lift:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.5)}
 
-    .fade-1{animation:fade-up .6s .0s both}
-    .fade-2{animation:fade-up .6s .15s both}
-    .fade-3{animation:fade-up .6s .3s both}
-    .fade-4{animation:fade-up .6s .45s both}
-    .float-anim{animation:float 6s ease-in-out infinite}
-    .glow-btn{animation:glow-red 3s ease-in-out infinite}
-    .shake{animation:shake .3s ease}
+/* animations */
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes glow-red{0%,100%{box-shadow:0 0 20px rgba(229,62,62,.3)}50%{box-shadow:0 0 45px rgba(229,62,62,.65)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 
-    /* ── Badges ── */
-    .badge{display:inline-flex;align-items:center;gap:.375rem;padding:.25rem .75rem;border-radius:9999px;font-size:.75rem;font-family:'DM Mono',monospace;border:1px solid}
-    .badge-red{background:rgba(229,62,62,.1);color:var(--red2);border-color:rgba(229,62,62,.3)}
-    .badge-blue{background:rgba(59,130,246,.1);color:#60a5fa;border-color:rgba(59,130,246,.2)}
-    .badge-amber{background:rgba(245,158,11,.1);color:var(--amber);border-color:rgba(245,158,11,.2)}
-    .badge-purple{background:rgba(168,85,247,.1);color:var(--purple);border-color:rgba(168,85,247,.2)}
-    .badge-green{background:rgba(16,185,129,.1);color:var(--green);border-color:rgba(16,185,129,.2)}
+.f1{animation:fadeUp .6s .0s both}.f2{animation:fadeUp .6s .15s both}
+.f3{animation:fadeUp .6s .3s both}.f4{animation:fadeUp .6s .45s both}
+.float-anim{animation:float 6s ease-in-out infinite}
+.glow{animation:glow-red 3s ease-in-out infinite}
 
-    /* ── Buttons ── */
-    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.65rem 1.75rem;border-radius:.5rem;font-weight:600;font-size:.95rem;cursor:pointer;border:none;transition:all .2s;text-decoration:none;white-space:nowrap}
-    .btn-primary{background:var(--red);color:#fff}.btn-primary:hover{background:var(--red2)}
-    .btn-outline{background:transparent;color:var(--w60);border:1px solid var(--w25)}.btn-outline:hover{background:var(--w05);color:#fff}
-    .btn-ghost{background:transparent;color:var(--w60);border:none}.btn-ghost:hover{color:#fff}
-    .btn-red-soft{background:rgba(229,62,62,.1);color:var(--red2);border:1px solid rgba(229,62,62,.2)}.btn-red-soft:hover{background:rgba(229,62,62,.2)}
-    .btn-green{background:var(--green);color:#000}.btn-green:hover{background:#34d399}
-    .btn-dark{background:var(--bg3);color:var(--w60);border:1px solid var(--w10)}.btn-dark:hover{color:#fff;border-color:var(--w25)}
-    .btn-sm{padding:.4rem 1rem;font-size:.825rem}
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:.375rem;padding:.25rem .75rem;border-radius:9999px;font-size:.75rem;font-family:'DM Mono',monospace;border:1px solid}
+.b-red{background:rgba(229,62,62,.1);color:var(--red2);border-color:rgba(229,62,62,.3)}
+.b-blue{background:rgba(59,130,246,.1);color:#60a5fa;border-color:rgba(59,130,246,.2)}
+.b-amber{background:rgba(245,158,11,.1);color:var(--amber);border-color:rgba(245,158,11,.2)}
+.b-green{background:rgba(16,185,129,.1);color:var(--green);border-color:rgba(16,185,129,.2)}
 
-    /* ── Nav ── */
-    nav{position:fixed;top:0;left:0;right:0;z-index:200;transition:all .3s}
-    nav.scrolled{background:rgba(5,10,20,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--w05)}
-    .nav-inner{display:flex;align-items:center;justify-content:space-between;height:4rem}
-    .nav-logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:#fff}
-    .nav-logo img{height:2rem;width:auto}
-    .nav-logo span{font-family:'Syne',sans-serif;font-weight:700;font-size:1.25rem;letter-spacing:-.02em}
-    .nav-links{display:flex;align-items:center;gap:2rem}
-    .nav-links a{color:var(--w40);text-decoration:none;font-size:.9rem;transition:color .2s}.nav-links a:hover{color:#fff}
-    .nav-actions{display:flex;align-items:center;gap:.75rem}
-    .hamburger{display:none;background:none;border:none;color:var(--w60);cursor:pointer}
-    .mobile-menu{display:none;flex-direction:column;gap:1rem;padding:1rem 1.5rem;background:var(--bg2);border-bottom:1px solid var(--w10)}
-    .mobile-menu.open{display:flex}
-    .mobile-menu a{color:var(--w60);text-decoration:none}
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.5rem;border-radius:.5rem;font-weight:600;font-size:.9rem;cursor:pointer;border:none;transition:all .2s;white-space:nowrap}
+.btn-red{background:var(--red);color:#fff}.btn-red:hover{background:var(--red2)}
+.btn-outline{background:transparent;color:var(--w60);border:1px solid var(--w25)}.btn-outline:hover{background:var(--w05);color:#fff}
+.btn-ghost{background:transparent;color:var(--w40);border:none}.btn-ghost:hover{color:#fff}
+.btn-dark{background:var(--bg3);color:var(--w60);border:1px solid var(--w10)}.btn-dark:hover{color:#fff}
+.btn-sm{padding:.4rem 1rem;font-size:.8rem}
 
-    /* ── Ticker ── */
-    .ticker-wrap{overflow:hidden;background:rgba(10,22,40,.6);border-bottom:1px solid var(--w05);padding-top:4rem}
-    .ticker-track{display:flex;white-space:nowrap;animation:ticker 30s linear infinite}
-    .ticker-item{display:inline-flex;align-items:center;gap:.375rem;padding:.5rem 1.25rem;font-size:.75rem;font-family:'DM Mono',monospace}
-    .ticker-item .sym{color:var(--w40)}
-    .up{color:var(--green)}.down{color:var(--red)}
+/* nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;transition:all .3s}
+nav.scrolled{background:rgba(5,10,20,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--w05)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:4rem}
+.logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:#fff}
+.logo img{height:2rem}
+.logo span{font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem}
+.nav-links{display:flex;gap:2rem}
+.nav-links a{color:var(--w40);text-decoration:none;font-size:.9rem;transition:color .2s}.nav-links a:hover{color:#fff}
+.nav-right{display:flex;gap:.75rem;align-items:center}
+.hamburger{display:none;background:none;border:none;color:var(--w60);cursor:pointer}
+.mob-menu{display:none;flex-direction:column;gap:1rem;padding:1rem 1.5rem;background:var(--bg2);border-bottom:1px solid var(--w10)}
+.mob-menu.open{display:flex}
+.mob-menu a{color:var(--w60);text-decoration:none}
 
-    /* ── Hero ── */
-    .hero{min-height:85vh;display:flex;align-items:center;position:relative;overflow:hidden}
-    .blob{position:absolute;border-radius:50%;filter:blur(80px)}
-    .blob-1{width:24rem;height:24rem;background:rgba(229,62,62,.08);top:20%;left:15%}
-    .blob-2{width:16rem;height:16rem;background:rgba(59,130,246,.06);bottom:20%;right:15%}
-    .hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;padding:6rem 0}
-    .hero-title{font-family:'Syne',sans-serif;font-size:clamp(2.5rem,5.5vw,4.25rem);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:1.5rem}
-    .hero-title .em{color:var(--red2)}
-    .hero-title .dim{color:var(--w25)}
-    .hero-sub{font-size:1.05rem;color:var(--w40);line-height:1.7;max-width:26rem;margin-bottom:2.5rem}
-    .hero-actions{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2rem}
-    .hero-pills{display:flex;gap:1.5rem;font-size:.75rem;color:var(--w25)}
-    .hero-pills span{display:flex;align-items:center;gap:.375rem}
-    .dot{width:.375rem;height:.375rem;border-radius:50%}
-    .dot-red{background:var(--red)}.dot-blue{background:var(--blue)}.dot-amber{background:var(--amber)}
+/* ticker */
+.ticker-wrap{overflow:hidden;background:rgba(10,22,40,.6);border-bottom:1px solid var(--w05);padding-top:4rem}
+.ticker-track{display:flex;white-space:nowrap;animation:ticker 28s linear infinite}
+.t-item{display:inline-flex;align-items:center;gap:.375rem;padding:.5rem 1.25rem;font-size:.75rem;font-family:'DM Mono',monospace}
+.t-sym{color:var(--w40)}
 
-    /* ── Hero visual ── */
-    .hero-visual{position:relative}
-    .hero-screen{background:var(--bg2);border:1px solid var(--w10);border-radius:1.25rem;overflow:hidden;padding:1.5rem}
-    .screen-bar{display:flex;align-items:center;gap:.5rem;margin-bottom:1.25rem}
-    .screen-dot{width:.5rem;height:.5rem;border-radius:50%}
-    .screen-stat{display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem;margin-bottom:1.25rem}
-    .ss-card{background:rgba(255,255,255,.04);border-radius:.75rem;padding:.875rem;border:1px solid var(--w05)}
-    .ss-label{font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:var(--w25);font-family:'DM Mono',monospace;margin-bottom:.375rem}
-    .ss-val{font-family:'DM Mono',monospace;font-weight:700;font-size:1.1rem}
-    .screen-pos{display:flex;flex-direction:column;gap:.5rem}
-    .sp-row{display:flex;align-items:center;justify-content:space-between;padding:.6rem .875rem;background:rgba(255,255,255,.03);border-radius:.5rem;border:1px solid var(--w05)}
-    .sp-name{font-size:.8rem;font-weight:600}
-    .sp-sub{font-size:.65rem;color:var(--w25);font-family:'DM Mono',monospace}
-    .sp-pnl{font-family:'DM Mono',monospace;font-size:.8rem;font-weight:600}
+/* hero */
+.hero{min-height:88vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:6rem 0}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none}
+.b1{width:22rem;height:22rem;background:rgba(229,62,62,.09);top:20%;left:15%}
+.b2{width:15rem;height:15rem;background:rgba(59,130,246,.06);bottom:20%;right:15%}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.hero-title{font-family:'Syne',sans-serif;font-size:clamp(2.5rem,5.5vw,4.25rem);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:1.5rem}
+.hero-title .em{color:var(--red2)}.hero-title .dim{color:var(--w25)}
+.hero-sub{color:var(--w40);font-size:1.05rem;line-height:1.7;max-width:26rem;margin-bottom:2.5rem}
+.hero-btns{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:2rem}
+.hero-pills{display:flex;gap:1.5rem;font-size:.75rem;color:var(--w25)}
+.hero-pills span{display:flex;align-items:center;gap:.375rem}
+.dot{width:.375rem;height:.375rem;border-radius:50%}
+.dot-r{background:var(--red)}.dot-b{background:var(--blue)}.dot-a{background:var(--amber)}
 
-    /* ── Stats bar ── */
-    .stats-bar{border-top:1px solid var(--w05);border-bottom:1px solid var(--w05);background:rgba(10,22,40,.4)}
-    .stats-inner{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;padding:2rem 0;text-align:center}
-    .stat-val{font-family:'Syne',sans-serif;font-size:2.25rem;font-weight:800;color:var(--red2)}
-    .stat-val span{font-size:.9rem;color:var(--w25);margin-left:.25rem;font-family:'DM Sans',sans-serif}
-    .stat-label{font-size:.75rem;color:rgba(255,255,255,.35);margin-top:.25rem}
+/* hero screen mockup */
+.screen{background:var(--bg2);border:1px solid var(--w10);border-radius:1.25rem;padding:1.5rem}
+.screen-bar{display:flex;align-items:center;gap:.375rem;margin-bottom:1.25rem}
+.sc-dot{width:.5rem;height:.5rem;border-radius:50%}
+.sc-url{font-size:.65rem;color:var(--w25);font-family:'DM Mono',monospace;margin-left:.5rem}
+.sc-kpis{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.25rem}
+.sc-kpi{background:rgba(255,255,255,.04);border:1px solid var(--w05);border-radius:.75rem;padding:.875rem}
+.sc-kpi-l{font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--w25);font-family:'DM Mono',monospace;margin-bottom:.25rem}
+.sc-kpi-v{font-family:'DM Mono',monospace;font-weight:700;font-size:1.05rem}
+.sc-pos{display:flex;flex-direction:column;gap:.5rem}
+.sc-row{display:flex;align-items:center;justify-content:space-between;padding:.6rem .875rem;background:rgba(255,255,255,.03);border:1px solid var(--w05);border-radius:.5rem}
+.sc-rn{font-size:.8rem;font-weight:600}.sc-rs{font-size:.65rem;color:var(--w25);font-family:'DM Mono',monospace}
+.sc-pnl{font-family:'DM Mono',monospace;font-size:.8rem;font-weight:600}
 
-    /* ── Profiles section ── */
-    .profiles-section{padding:5rem 0;background:rgba(10,22,40,.3)}
-    .profiles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
-    .profile-card{padding:2rem;text-align:center;cursor:pointer;position:relative;overflow:hidden}
-    .profile-card::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(229,62,62,.1),transparent 70%);opacity:0;transition:opacity .3s}
-    .profile-card:hover::before{opacity:1}
-    .profile-emoji{font-size:3.5rem;margin-bottom:1rem;display:block}
-    .profile-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;margin-bottom:.25rem}
-    .profile-type{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--w25);font-family:'DM Mono',monospace;margin-bottom:1.5rem}
-    .profile-stats{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.5rem}
-    .ps-item{background:rgba(255,255,255,.04);border-radius:.5rem;padding:.75rem;border:1px solid var(--w05)}
-    .ps-label{font-size:.65rem;color:var(--w25);font-family:'DM Mono',monospace;margin-bottom:.25rem}
-    .ps-val{font-family:'DM Mono',monospace;font-size:.9rem;font-weight:600}
-    .profile-btn{width:100%;justify-content:center}
-    .profile-lock{position:absolute;top:1rem;right:1rem;opacity:.3;font-size:1rem}
+/* stats bar */
+.stats-bar{border-top:1px solid var(--w05);border-bottom:1px solid var(--w05);background:rgba(10,22,40,.4)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;padding:2rem 0;text-align:center}
+.stat-v{font-family:'Syne',sans-serif;font-size:2.25rem;font-weight:800;color:var(--red2)}
+.stat-v span{font-size:.9rem;color:var(--w25);margin-left:.25rem;font-family:'DM Sans',sans-serif}
+.stat-l{font-size:.75rem;color:rgba(255,255,255,.35);margin-top:.25rem}
 
-    /* ── Features ── */
-    .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
-    .feature-card{padding:1.5rem}
-    .feature-icon{width:2.5rem;height:2.5rem;background:rgba(229,62,62,.1);border-radius:.75rem;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;transition:background .2s}
-    .feature-card:hover .feature-icon{background:rgba(229,62,62,.2)}
-    .feature-icon svg{width:1.25rem;height:1.25rem;stroke:var(--red2);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-    .feature-title{font-weight:600;margin-bottom:.5rem}
-    .feature-desc{font-size:.875rem;color:var(--w40);line-height:1.6}
+/* profiles section */
+.prof-section{padding:6rem 0;background:rgba(10,22,40,.3)}
+.prof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem}
+.prof-card{padding:2rem;text-align:center;cursor:pointer;position:relative;overflow:hidden;transition:all .25s}
+.prof-card::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0,rgba(229,62,62,.12),transparent 70%);opacity:0;transition:opacity .3s}
+.prof-card:hover::after,.prof-card:hover{opacity:1}
+.prof-card:hover{border-color:rgba(229,62,62,.4)}
+.p-lock{position:absolute;top:1rem;right:1rem;font-size:.9rem;opacity:.25}
+.p-emoji{font-size:3.5rem;margin-bottom:.75rem;display:block}
+.p-name{font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;margin-bottom:.25rem}
+.p-type{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--w25);font-family:'DM Mono',monospace;margin-bottom:1.5rem}
+.p-stats{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.5rem}
+.p-stat{background:rgba(255,255,255,.04);border:1px solid var(--w05);border-radius:.5rem;padding:.75rem}
+.p-stat-l{font-size:.6rem;color:var(--w25);font-family:'DM Mono',monospace;margin-bottom:.25rem}
+.p-stat-v{font-family:'DM Mono',monospace;font-size:.9rem;font-weight:600}
 
-    /* ── How ── */
-    .how-bg{background:rgba(10,22,40,.3)}
-    .steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
-    .step-card{padding:2rem}
-    .step-num{font-family:'Syne',sans-serif;font-size:4rem;font-weight:800;color:rgba(255,255,255,.04);margin-bottom:1rem;line-height:1}
-    .step-icon{width:3rem;height:3rem;background:rgba(245,158,11,.1);border-radius:.75rem;display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
-    .step-icon svg{width:1.4rem;height:1.4rem;stroke:var(--amber);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-    .step-title{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:700;margin-bottom:.75rem}
-    .step-desc{font-size:.875rem;color:var(--w40);line-height:1.6}
+/* features */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.feat-card{padding:1.5rem}
+.feat-icon{width:2.5rem;height:2.5rem;background:rgba(229,62,62,.1);border-radius:.75rem;display:flex;align-items:center;justify-content:center;margin-bottom:1rem;transition:background .2s}
+.feat-card:hover .feat-icon{background:rgba(229,62,62,.2)}
+.feat-icon svg{width:1.25rem;height:1.25rem;stroke:var(--red2);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.feat-t{font-weight:600;margin-bottom:.5rem}.feat-d{font-size:.875rem;color:var(--w40);line-height:1.6}
 
-    /* ── Section commons ── */
-    section{padding:6rem 0}
-    .section-header{text-align:center;margin-bottom:4rem}
-    .section-title{font-family:'Syne',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:800;margin-bottom:1rem;line-height:1.1}
-    .section-sub{color:rgba(255,255,255,.35);max-width:36rem;margin:0 auto}
+/* how */
+.how-bg{background:rgba(10,22,40,.3)}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+.step-card{padding:2rem}
+.step-n{font-family:'Syne',sans-serif;font-size:4rem;font-weight:800;color:rgba(255,255,255,.04);line-height:1;margin-bottom:1rem}
+.step-icon{width:3rem;height:3rem;background:rgba(245,158,11,.1);border-radius:.75rem;display:flex;align-items:center;justify-content:center;margin-bottom:1rem}
+.step-icon svg{width:1.4rem;height:1.4rem;stroke:var(--amber);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.step-t{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;margin-bottom:.75rem}
+.step-d{font-size:.875rem;color:var(--w40);line-height:1.6}
 
-    /* ── CTA ── */
-    .cta-section{position:relative;overflow:hidden;padding:8rem 0}
-    .cta-glow{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(229,62,62,.1) 0%,transparent 65%);pointer-events:none}
-    .cta-inner{position:relative;max-width:48rem;margin:0 auto;text-align:center}
-    .cta-title{font-family:'Syne',sans-serif;font-size:clamp(2.25rem,5vw,3.75rem);font-weight:800;margin-bottom:1.5rem;line-height:1.05}
-    .cta-sub{color:var(--w40);font-size:1.05rem;margin-bottom:2.5rem}
-    .cta-actions{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem}
-    .cta-legal{font-size:.75rem;color:rgba(255,255,255,.2);max-width:36rem;margin:0 auto;line-height:1.5}
+/* section commons */
+section{padding:6rem 0}
+.sec-hd{text-align:center;margin-bottom:4rem}
+.sec-t{font-family:'Syne',sans-serif;font-size:clamp(1.75rem,4vw,3rem);font-weight:800;margin-bottom:1rem;line-height:1.1}
+.sec-sub{color:rgba(255,255,255,.35);max-width:36rem;margin:0 auto}
 
-    /* ── Footer ── */
-    footer{border-top:1px solid var(--w05);padding:2.5rem 0}
-    .footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-    .footer-links{display:flex;gap:1.5rem}
-    .footer-links a{font-size:.75rem;color:var(--w25);text-decoration:none;transition:color .2s}.footer-links a:hover{color:var(--w40)}
-    .footer-copy{font-size:.75rem;color:rgba(255,255,255,.2)}
+/* CTA */
+.cta-sec{position:relative;overflow:hidden;padding:8rem 0}
+.cta-glow{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(229,62,62,.1) 0%,transparent 65%);pointer-events:none}
+.cta-box{position:relative;max-width:48rem;margin:0 auto;text-align:center}
+.cta-t{font-family:'Syne',sans-serif;font-size:clamp(2.25rem,5vw,3.75rem);font-weight:800;margin-bottom:1.5rem;line-height:1.05}
 
-    /* ══════════════════════════════════════════
-       ── PASSWORD MODAL ──
-    ══════════════════════════════════════════ */
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:500;display:none;align-items:center;justify-content:center}
-    .modal-overlay.open{display:flex;animation:fadeIn .2s ease}
-    .modal-box{background:var(--bg2);border:1px solid rgba(229,62,62,.2);border-radius:1.5rem;padding:2.5rem;width:100%;max-width:26rem;animation:slideUp .3s ease;text-align:center}
-    .modal-emoji{font-size:3rem;margin-bottom:.75rem;display:block}
-    .modal-name{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:.25rem}
-    .modal-type{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--w25);font-family:'DM Mono',monospace;margin-bottom:1.75rem}
-    .modal-input-wrap{position:relative;margin-bottom:1rem}
-    .modal-input{width:100%;background:rgba(255,255,255,.05);border:1px solid var(--w10);border-radius:.75rem;padding:.875rem 1rem;color:#fff;font-size:1rem;font-family:'DM Mono',monospace;text-align:center;letter-spacing:.2em;outline:none;transition:border-color .2s}
-    .modal-input:focus{border-color:rgba(229,62,62,.5)}
-    .modal-input.error{border-color:var(--red);animation:shake .3s ease}
-    .modal-error{color:var(--red2);font-size:.8rem;margin-bottom:1rem;min-height:1.2rem;font-family:'DM Mono',monospace}
-    .modal-actions{display:flex;gap:.75rem}
-    .modal-actions .btn{flex:1;justify-content:center}
-    .modal-hint{font-size:.7rem;color:var(--w25);margin-top:1rem;font-family:'DM Mono',monospace}
+/* footer */
+footer{border-top:1px solid var(--w05);padding:2.5rem 0}
+.foot-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.foot-links{display:flex;gap:1.5rem}
+.foot-links a{font-size:.75rem;color:var(--w25);text-decoration:none}.foot-links a:hover{color:var(--w40)}
+.foot-copy{font-size:.75rem;color:rgba(255,255,255,.2)}
 
-    /* ══════════════════════════════════════════
-       ── DASHBOARD ──
-    ══════════════════════════════════════════ */
-    #dashboard{display:none;min-height:100vh;background:var(--bg)}
-    #dashboard.active{display:block;animation:fadeIn .4s ease}
+/* ══ MODAL ══ */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);z-index:500;display:none;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex;animation:fadeIn .2s ease}
+.modal-box{background:var(--bg2);border:1px solid rgba(229,62,62,.25);border-radius:1.5rem;padding:2.5rem;width:100%;max-width:24rem;animation:slideUp .3s ease;text-align:center}
+.m-emoji{font-size:3rem;margin-bottom:.75rem;display:block}
+.m-name{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;margin-bottom:.2rem}
+.m-type{font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--w25);font-family:'DM Mono',monospace;margin-bottom:1.75rem}
+.m-input{width:100%;background:rgba(255,255,255,.06);border:1px solid var(--w10);border-radius:.75rem;padding:.875rem;color:#fff;font-size:1rem;font-family:'DM Mono',monospace;text-align:center;letter-spacing:.25em;outline:none;transition:border-color .2s;margin-bottom:.75rem}
+.m-input:focus{border-color:rgba(229,62,62,.5)}
+.m-input.err{border-color:var(--red);animation:shake .3s ease}
+.m-error{color:var(--red2);font-size:.8rem;min-height:1.2rem;margin-bottom:.75rem;font-family:'DM Mono',monospace}
+.m-btns{display:flex;gap:.75rem}
+.m-btns .btn{flex:1;justify-content:center}
 
-    .dash-nav{background:rgba(5,10,20,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--w05);padding:0 1.5rem;height:4rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
-    .dash-nav-left{display:flex;align-items:center;gap:1rem}
-    .dash-nav-logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:#fff}
-    .dash-nav-logo img{height:1.75rem}
-    .dash-nav-logo span{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem}
-    .dash-profile-badge{display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.05);border:1px solid var(--w10);border-radius:9999px;padding:.25rem .75rem .25rem .5rem;font-size:.875rem}
-    .dash-profile-emoji{font-size:1.1rem}
-    .dash-profile-name{font-weight:600}
-    .dash-nav-right{display:flex;align-items:center;gap:.75rem}
-    .dash-live{display:flex;align-items:center;gap:.375rem;font-size:.75rem;color:var(--green);font-family:'DM Mono',monospace}
-    .dash-live-dot{width:.4rem;height:.4rem;background:var(--green);border-radius:50%;animation:pulse-dot 1.5s infinite}
+/* ══ DASHBOARD ══ */
+#dashboard{display:none;min-height:100vh}
+#dashboard.show{display:block;animation:fadeIn .35s ease}
 
-    .dash-body{max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
+.dash-nav{background:rgba(5,10,20,.96);backdrop-filter:blur(12px);border-bottom:1px solid var(--w05);padding:0 1.5rem;height:4rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.dash-nav-l{display:flex;align-items:center;gap:.875rem}
+.dash-logo{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:#fff;cursor:pointer}
+.dash-logo img{height:1.75rem}
+.dash-logo span{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem}
+.dash-badge{display:flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.06);border:1px solid var(--w10);border-radius:9999px;padding:.2rem .75rem .2rem .5rem;font-size:.875rem}
+.dash-nav-r{display:flex;align-items:center;gap:.875rem}
+.live-ind{display:flex;align-items:center;gap:.375rem;font-size:.75rem;color:var(--green);font-family:'DM Mono',monospace}
+.live-dot{width:.4rem;height:.4rem;background:var(--green);border-radius:50%;animation:pulse 1.5s infinite}
 
-    /* Profiles switcher */
-    .profiles-switcher{display:flex;gap:.75rem;margin-bottom:2rem;overflow-x:auto;padding-bottom:.25rem}
-    .prof-tab{display:flex;align-items:center;gap:.5rem;padding:.5rem 1rem;border-radius:.5rem;cursor:pointer;border:1px solid var(--w10);background:transparent;color:var(--w40);font-size:.875rem;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap}
-    .prof-tab:hover{border-color:var(--w25);color:#fff}
-    .prof-tab.active{background:rgba(229,62,62,.1);border-color:rgba(229,62,62,.3);color:var(--red2)}
-    .prof-tab-emoji{font-size:1.1rem}
+.dash-body{max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
 
-    /* KPI cards */
-    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
-    .kpi-card{background:var(--bg2);border:1px solid var(--w05);border-radius:.875rem;padding:1.25rem}
-    .kpi-label{font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:var(--w25);font-family:'DM Mono',monospace;margin-bottom:.5rem}
-    .kpi-val{font-family:'DM Mono',monospace;font-weight:700;font-size:1.5rem;margin-bottom:.25rem}
-    .kpi-sub{font-size:.75rem;color:var(--w40)}
-    .kpi-gain{color:var(--green)}.kpi-loss{color:var(--red)}
+/* profile tabs */
+.prof-tabs{display:flex;gap:.75rem;margin-bottom:2rem;overflow-x:auto;padding-bottom:.25rem}
+.p-tab{display:flex;align-items:center;gap:.5rem;padding:.45rem 1rem;border-radius:.5rem;cursor:pointer;border:1px solid var(--w10);background:transparent;color:var(--w40);font-size:.875rem;font-family:'DM Sans',sans-serif;transition:all .2s;white-space:nowrap}
+.p-tab:hover{border-color:var(--w25);color:#fff}
+.p-tab.active{background:rgba(229,62,62,.1);border-color:rgba(229,62,62,.35);color:var(--red2)}
+.p-tab-sub{font-size:.65rem;opacity:.6;font-family:'DM Mono',monospace}
 
-    /* Positions */
-    .positions-card{background:var(--bg2);border:1px solid var(--w05);border-radius:.875rem;overflow:hidden;margin-bottom:2rem}
-    .pos-card-header{padding:1rem 1.25rem;border-bottom:1px solid var(--w05);display:flex;align-items:center;justify-content:space-between}
-    .pos-card-title{font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--w25);font-family:'DM Mono',monospace}
-    .pos-header{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr 1fr;gap:1rem;padding:.75rem 1.25rem;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;color:var(--w25);font-family:'DM Mono',monospace;border-bottom:1px solid var(--w05)}
-    .pos-row{display:grid;grid-template-columns:2fr 1fr 1fr 1.5fr 1fr;gap:1rem;padding:1.1rem 1.25rem;align-items:center;border-bottom:1px solid var(--w05);transition:background .15s}
-    .pos-row:hover{background:var(--w05)}
-    .pos-row:last-child{border-bottom:none}
-    .pos-asset-name{font-weight:600;font-size:.875rem;margin-bottom:.2rem}
-    .pos-asset-sub{font-size:.65rem;color:var(--w25);font-family:'DM Mono',monospace}
-    .pos-val{font-family:'DM Mono',monospace;font-size:.875rem}
-    .signal-bars{display:flex;flex-direction:column;gap:3px}
-    .signal-bar-row{display:flex;align-items:center;gap:.375rem;font-size:.65rem;font-family:'DM Mono',monospace;color:var(--w40)}
-    .signal-bar-bg{flex:1;height:4px;background:var(--w10);border-radius:2px;overflow:hidden}
-    .signal-bar-fill{height:100%;border-radius:2px;transition:width .5s}
-    .fill-up{background:var(--green)}.fill-down{background:var(--red)}
-    .risk-badge{padding:.2rem .6rem;border-radius:.25rem;font-size:.7rem;font-family:'DM Mono',monospace;font-weight:600}
-    .risk-moyen{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
-    .risk-faible{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
-    .risk-eleve{background:rgba(229,62,62,.15);color:var(--red2);border:1px solid rgba(229,62,62,.3)}
+/* KPI grid */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.75rem}
+.kpi{background:var(--bg2);border:1px solid var(--w05);border-radius:.875rem;padding:1.25rem}
+.kpi-l{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--w25);font-family:'DM Mono',monospace;margin-bottom:.5rem}
+.kpi-v{font-family:'DM Mono',monospace;font-weight:700;font-size:1.5rem;margin-bottom:.25rem}
+.kpi-s{font-size:.75rem;color:var(--w40)}
 
-    /* Bottom grid */
-    .bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem}
-    .dash-card{background:var(--bg2);border:1px solid var(--w05);border-radius:.875rem;overflow:hidden}
-    .dash-card-header{padding:1rem 1.25rem;border-bottom:1px solid var(--w05);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--w25);font-family:'DM Mono',monospace;display:flex;align-items:center;justify-content:space-between}
-    .dash-card-body{padding:1.25rem}
+/* positions */
+.pos-card{background:var(--bg2);border:1px solid var(--w05);border-radius:.875rem;overflow:hidden;margin-bottom:1.75rem}
+.pos-card-hd{padding:.875rem 1.25rem;border-bottom:1px solid var(--w05);display:flex;align-items:center;justify-content:space-between}
+.pos-card-hd-t{font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--w25);font-family:'DM Mono',monospace}
+.pos-cols{display:grid;grid-template-columns:2fr 1fr 1fr 1.6fr 1fr;gap:1rem;padding:.7rem 1.25rem;font-size:.65rem;letter-spacing:.07em;text-transform:uppercase;color:var(--w25);font-family:'DM Mono',monospace;border-bottom:1px solid var(--w05)}
+.pos-row{display:grid;grid-template-columns:2fr 1fr 1fr 1.6fr 1fr;gap:1rem;padding:1rem 1.25rem;align-items:center;border-bottom:1px solid var(--w05);transition:background .15s}
+.pos-row:hover{background:rgba(255,255,255,.03)}
+.pos-row:last-child{border-bottom:none}
+.pos-name{font-weight:600;font-size:.875rem;margin-bottom:.2rem}
+.pos-sub{font-size:.65rem;color:var(--w25);font-family:'DM Mono',monospace}
+.pos-v{font-family:'DM Mono',monospace;font-size:.875rem}
+.sig-bars{display:flex;flex-direction:column;gap:3px}
+.sig-row{display:flex;align-items:center;gap:.375rem;font-size:.65rem;font-family:'DM Mono',monospace;color:var(--w40)}
+.sig-h{width:1.5rem;opacity:.5;flex-shrink:0}
+.sig-bg{flex:1;height:4px;background:var(--w10);border-radius:2px;overflow:hidden}
+.sig-fill{height:100%;border-radius:2px}
+.fill-up{background:var(--green)}.fill-dn{background:var(--red)}
+.risk{padding:.2rem .6rem;border-radius:.25rem;font-size:.7rem;font-family:'DM Mono',monospace;font-weight:600}
+.r-moyen{background:rgba(245,158,11,.15);color:var(--amber);border:1px solid rgba(245,158,11,.3)}
+.r-faible{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+.r-eleve{background:rgba(229,62,62,.15);color:var(--red2);border:1px solid rgba(229,62,62,.3)}
 
-    /* IA Signals */
-    .signal-section{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-    .signal-col-title{font-size:.7rem;font-family:'DM Mono',monospace;margin-bottom:.75rem;display:flex;align-items:center;gap:.375rem}
-    .signal-item{display:flex;align-items:center;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--w05)}
-    .signal-item:last-child{border-bottom:none}
-    .signal-name{font-size:.825rem;font-weight:500}
-    .signal-sub{font-size:.65rem;color:var(--w25);font-family:'DM Mono',monospace}
-    .signal-pct{font-family:'DM Mono',monospace;font-weight:700;font-size:.875rem}
+/* bottom */
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2rem}
+.d-card{background:var(--bg2);border:1px solid var(--w05);border-radius:.875rem;overflow:hidden}
+.d-card-hd{padding:.875rem 1.25rem;border-bottom:1px solid var(--w05);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--w25);font-family:'DM Mono',monospace;display:flex;align-items:center;justify-content:space-between}
+.d-card-body{padding:1.25rem}
+.sig-cols{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
+.sig-col-t{font-size:.7rem;font-family:'DM Mono',monospace;margin-bottom:.75rem;display:flex;align-items:center;gap:.375rem}
+.sig-item{display:flex;align-items:center;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--w05)}
+.sig-item:last-child{border-bottom:none}
+.sig-iname{font-size:.825rem;font-weight:500}
+.sig-isub{font-size:.65rem;color:var(--w25);font-family:'DM Mono',monospace}
+.sig-ipct{font-family:'DM Mono',monospace;font-weight:700;font-size:.875rem}
+.rep-bar{height:.875rem;border-radius:.5rem;overflow:hidden;display:flex;margin-bottom:.875rem}
+.rep-seg{height:100%}
+.rep-leg{display:flex;gap:1rem;flex-wrap:wrap}
+.rep-item{display:flex;align-items:center;gap:.375rem;font-size:.75rem;color:var(--w60);font-family:'DM Mono',monospace}
+.rep-dot{width:.5rem;height:.5rem;border-radius:50%;flex-shrink:0}
+.jour-empty{text-align:center;padding:2rem;color:var(--w25);font-size:.875rem}
+.jour-note{background:rgba(255,255,255,.03);border:1px solid var(--w05);border-radius:.5rem;padding:.875rem;margin-bottom:.75rem;font-size:.875rem;color:var(--w60);line-height:1.6}
+.jour-note-d{font-size:.65rem;color:var(--w25);font-family:'DM Mono',monospace;margin-bottom:.375rem}
+.jour-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--w10);border-radius:.5rem;padding:.75rem;color:#fff;font-size:.875rem;font-family:'DM Sans',sans-serif;resize:none;outline:none;margin-bottom:.75rem;transition:border-color .2s}
+.jour-input:focus{border-color:rgba(229,62,62,.4)}
+.jour-input::placeholder{color:var(--w25)}
+.jour-form{display:none}
+.jour-form.open{display:block}
+.right-col{display:flex;flex-direction:column;gap:1.5rem}
 
-    /* Répartition */
-    .repartition-bar{height:.875rem;border-radius:.5rem;overflow:hidden;display:flex;margin-bottom:.875rem}
-    .rep-segment{height:100%;transition:width .5s}
-    .rep-legend{display:flex;gap:1rem;flex-wrap:wrap}
-    .rep-item{display:flex;align-items:center;gap:.375rem;font-size:.75rem;color:var(--w60);font-family:'DM Mono',monospace}
-    .rep-dot{width:.5rem;height:.5rem;border-radius:50%;flex-shrink:0}
-
-    /* Journal */
-    .journal-empty{text-align:center;padding:2rem;color:var(--w25);font-size:.875rem}
-    .journal-note{background:rgba(255,255,255,.03);border:1px solid var(--w05);border-radius:.5rem;padding:.875rem;margin-bottom:.75rem;font-size:.875rem;color:var(--w60);line-height:1.6}
-    .journal-note-date{font-size:.65rem;color:var(--w25);font-family:'DM Mono',monospace;margin-bottom:.375rem}
-    .journal-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--w10);border-radius:.5rem;padding:.75rem;color:#fff;font-size:.875rem;font-family:'DM Sans',sans-serif;resize:none;outline:none;margin-bottom:.75rem;transition:border-color .2s}
-    .journal-input:focus{border-color:rgba(229,62,62,.4)}
-    .journal-input::placeholder{color:var(--w25)}
-    #journal-form{display:none}
-    #journal-form.open{display:block}
-
-    /* Responsive */
-    @media(max-width:900px){
-      .hero-inner{grid-template-columns:1fr}
-      .hero-visual{display:none}
-      .kpi-grid{grid-template-columns:repeat(2,1fr)}
-      .pos-header,.pos-row{grid-template-columns:2fr 1fr 1fr}
-      .pos-header>:nth-child(4),.pos-header>:nth-child(5),
-      .pos-row>:nth-child(4),.pos-row>:nth-child(5){display:none}
-      .features-grid{grid-template-columns:repeat(2,1fr)}
-      .steps-grid{grid-template-columns:1fr}
-      .bottom-grid{grid-template-columns:1fr}
-      .profiles-grid{grid-template-columns:1fr}
-      .signal-section{grid-template-columns:1fr}
-      .nav-links,.nav-actions{display:none}
-      .hamburger{display:block}
-      .stats-inner{grid-template-columns:repeat(2,1fr)}
-    }
-    @media(max-width:600px){
-      .features-grid{grid-template-columns:1fr}
-      .kpi-grid{grid-template-columns:1fr 1fr}
-    }
-  </style>
+/* responsive */
+@media(max-width:960px){
+  .hero-grid,.tribe-inner{grid-template-columns:1fr}
+  .screen{display:none}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .pos-cols,.pos-row{grid-template-columns:2fr 1fr 1fr}
+  .pos-cols>:nth-child(4),.pos-cols>:nth-child(5),
+  .pos-row>:nth-child(4),.pos-row>:nth-child(5){display:none}
+  .feat-grid{grid-template-columns:repeat(2,1fr)}
+  .steps-grid,.bottom-grid,.prof-grid{grid-template-columns:1fr}
+  .sig-cols{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:repeat(2,1fr)}
+  .nav-links,.nav-right{display:none}
+  .hamburger{display:block}
+}
+@media(max-width:600px){.feat-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr}}
+</style>
 </head>
 <body>
 
-<!-- ════════════════════════════════════════
-     LANDING PAGE
-════════════════════════════════════════ -->
+<!-- ══ LANDING ══ -->
 <div id="landing">
 
-<!-- Nav -->
 <nav id="nav">
   <div class="container">
     <div class="nav-inner">
-      <a href="#" class="nav-logo">
+      <a class="logo" href="#">
         <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAQABgADASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAj/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AIyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//9k=" alt="Richch"/>
         <span>Richch</span>
       </a>
@@ -326,21 +294,21 @@
         <a href="#features">Fonctionnalités</a>
         <a href="#how">Comment ça marche</a>
       </div>
-      <div class="nav-actions">
+      <div class="nav-right">
         <button class="btn btn-ghost btn-sm">Se connecter</button>
-        <button class="btn btn-primary btn-sm glow-btn" onclick="scrollToProfiles()">Accéder au dashboard</button>
+        <button class="btn btn-red btn-sm glow" onclick="document.getElementById('profils').scrollIntoView({behavior:'smooth'})">Accéder au dashboard</button>
       </div>
-      <button class="hamburger" id="hamburger">
-        <svg id="icon-menu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        <svg id="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <button class="hamburger" id="ham">
+        <svg id="hm" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg id="hx" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="display:none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
   </div>
-  <div class="mobile-menu" id="mobile-menu">
-    <a href="#profils" onclick="closeMobile()">Nos profils</a>
-    <a href="#features" onclick="closeMobile()">Fonctionnalités</a>
-    <a href="#how" onclick="closeMobile()">Comment ça marche</a>
-    <button class="btn btn-primary glow-btn" style="width:100%;justify-content:center">Accéder au dashboard</button>
+  <div class="mob-menu" id="mob">
+    <a href="#profils" onclick="closeMob()">Nos profils</a>
+    <a href="#features" onclick="closeMob()">Fonctionnalités</a>
+    <a href="#how" onclick="closeMob()">Comment ça marche</a>
+    <button class="btn btn-red" style="width:100%;justify-content:center">Accéder au dashboard</button>
   </div>
 </nav>
 
@@ -351,26 +319,18 @@
 
 <!-- Hero -->
 <section class="hero">
-  <div style="position:absolute;inset:0;pointer-events:none">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-  </div>
+  <div class="blob b1"></div><div class="blob b2"></div>
   <div class="container">
-    <div class="hero-inner">
+    <div class="hero-grid">
       <div>
-        <div class="badge badge-red fade-1" style="margin-bottom:1.5rem">
+        <div class="badge b-red f1" style="margin-bottom:1.5rem">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
           Simulation · 0€ de risque
         </div>
-        <h1 class="hero-title fade-2">
-          Investis comme<br>
-          <span class="em">un pro.</span><br>
-          Sans risquer<br>
-          <span class="dim">un centime.</span>
-        </h1>
-        <p class="hero-sub fade-3">Richch est la plateforme de simulation d'investissement propulsée par l'IA. Construis ton portefeuille, défie ta tribu, maîtrise les marchés mondiaux.</p>
-        <div class="hero-actions fade-4">
-          <button class="btn btn-primary glow-btn" style="font-size:1rem;padding:.75rem 2rem" onclick="scrollToProfiles()">
+        <h1 class="hero-title f2">Investis comme<br><span class="em">un pro.</span><br>Sans risquer<br><span class="dim">un centime.</span></h1>
+        <p class="hero-sub f3">Richch est la plateforme de simulation d'investissement propulsée par l'IA. Construis ton portefeuille, défie ta tribu, maîtrise les marchés mondiaux.</p>
+        <div class="hero-btns f4">
+          <button class="btn btn-red glow" style="font-size:1rem;padding:.75rem 2rem" onclick="document.getElementById('profils').scrollIntoView({behavior:'smooth'})">
             Accéder au dashboard
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
@@ -379,52 +339,31 @@
             Voir la démo
           </button>
         </div>
-        <div class="hero-pills fade-4">
-          <span><span class="dot dot-red"></span>76 actifs</span>
-          <span><span class="dot dot-blue"></span>5 langues</span>
-          <span><span class="dot dot-amber"></span>Gratuit</span>
+        <div class="hero-pills f4">
+          <span><span class="dot dot-r"></span>76 actifs</span>
+          <span><span class="dot dot-b"></span>5 langues</span>
+          <span><span class="dot dot-a"></span>Gratuit</span>
         </div>
       </div>
-      <!-- Hero visual -->
-      <div class="hero-visual float-anim fade-2">
-        <div class="hero-screen">
+      <!-- Mockup -->
+      <div class="float-anim f2">
+        <div class="screen">
           <div class="screen-bar">
-            <div class="screen-dot" style="background:#ef4444"></div>
-            <div class="screen-dot" style="background:#f59e0b"></div>
-            <div class="screen-dot" style="background:#10b981"></div>
-            <span style="margin-left:.5rem;font-size:.7rem;color:var(--w25);font-family:'DM Mono',monospace">richch.io/dashboard</span>
+            <div class="sc-dot" style="background:#ef4444"></div>
+            <div class="sc-dot" style="background:#f59e0b"></div>
+            <div class="sc-dot" style="background:#10b981"></div>
+            <span class="sc-url">richch.io/dashboard · Greg</span>
           </div>
-          <div class="screen-stat">
-            <div class="ss-card">
-              <div class="ss-label">Portfolio</div>
-              <div class="ss-val up">645,59 €</div>
-            </div>
-            <div class="ss-card">
-              <div class="ss-label">Gain total</div>
-              <div class="ss-val up">+145,59 €</div>
-            </div>
-            <div class="ss-card">
-              <div class="ss-label">Performance</div>
-              <div class="ss-val up">+29.12%</div>
-            </div>
-            <div class="ss-card">
-              <div class="ss-label">Signaux IA</div>
-              <div class="ss-val" style="color:var(--amber)">76 actifs</div>
-            </div>
+          <div class="sc-kpis">
+            <div class="sc-kpi"><div class="sc-kpi-l">Portfolio</div><div class="sc-kpi-v up">645,59 €</div></div>
+            <div class="sc-kpi"><div class="sc-kpi-l">Gain total</div><div class="sc-kpi-v up">+145,59 €</div></div>
+            <div class="sc-kpi"><div class="sc-kpi-l">Performance</div><div class="sc-kpi-v up">+29.12%</div></div>
+            <div class="sc-kpi"><div class="sc-kpi-l">Signaux IA</div><div class="sc-kpi-v" style="color:var(--amber)">76 actifs</div></div>
           </div>
-          <div class="screen-pos">
-            <div class="sp-row">
-              <div><div class="sp-name">ETF Défense Europe</div><div class="sp-sub">DFEN · +97,25 €</div></div>
-              <div class="sp-pnl up">▲ +64.8%</div>
-            </div>
-            <div class="sp-row">
-              <div><div class="sp-name">ETF S&P 500</div><div class="sp-sub">SP5 · +24,74 €</div></div>
-              <div class="sp-pnl up">▲ +90.1%</div>
-            </div>
-            <div class="sp-row">
-              <div><div class="sp-name">ETF Stoxx 600</div><div class="sp-sub">STOX · +22,94 €</div></div>
-              <div class="sp-pnl up">▲ +52.8%</div>
-            </div>
+          <div class="sc-pos">
+            <div class="sc-row"><div><div class="sc-rn">ETF Défense Europe</div><div class="sc-rs">DFEN · +97,25 €</div></div><div class="sc-pnl up">▲ +64.8%</div></div>
+            <div class="sc-row"><div><div class="sc-rn">ETF S&P 500</div><div class="sc-rs">SP5 · +24,74 €</div></div><div class="sc-pnl up">▲ +90.1%</div></div>
+            <div class="sc-row"><div><div class="sc-rn">ETF Stoxx 600</div><div class="sc-rs">STOX · +22,94 €</div></div><div class="sc-pnl up">▲ +52.8%</div></div>
           </div>
         </div>
       </div>
@@ -435,42 +374,42 @@
 <!-- Stats -->
 <div class="stats-bar">
   <div class="container">
-    <div class="stats-inner">
-      <div><div class="stat-val">76<span>actifs</span></div><div class="stat-label">Actifs simulés</div></div>
-      <div><div class="stat-val">4<span>horizons</span></div><div class="stat-label">Timeframes ML</div></div>
-      <div><div class="stat-val">73<span>%</span></div><div class="stat-label">Précision IA</div></div>
-      <div><div class="stat-val">∞<span>tribus</span></div><div class="stat-label">Communautés</div></div>
+    <div class="stats-grid">
+      <div><div class="stat-v">76<span>actifs</span></div><div class="stat-l">Actifs simulés</div></div>
+      <div><div class="stat-v">4<span>horizons</span></div><div class="stat-l">Timeframes ML</div></div>
+      <div><div class="stat-v">73<span>%</span></div><div class="stat-l">Précision IA</div></div>
+      <div><div class="stat-v">∞<span>tribus</span></div><div class="stat-l">Communautés</div></div>
     </div>
   </div>
 </div>
 
-<!-- PROFILES SECTION -->
-<div class="profiles-section" id="profils">
+<!-- Profiles -->
+<div class="prof-section" id="profils">
   <div class="container">
-    <div class="section-header">
-      <div class="badge badge-red" style="margin-bottom:1rem">Accès privé</div>
-      <h2 class="section-title">Choisissez votre <span style="color:var(--red2)">profil</span></h2>
-      <p class="section-sub">Chaque profil a sa propre stratégie, ses positions et ses performances. Accès protégé par mot de passe.</p>
+    <div class="sec-hd">
+      <div class="badge b-red" style="margin-bottom:1rem">Accès privé</div>
+      <h2 class="sec-t">Choisissez votre <span style="color:var(--red2)">profil</span></h2>
+      <p class="sec-sub">Chaque profil a sa propre stratégie et ses performances. Accès protégé par mot de passe.</p>
     </div>
-    <div class="profiles-grid" id="profile-cards"></div>
+    <div class="prof-grid" id="prof-cards"></div>
   </div>
 </div>
 
 <!-- Features -->
 <section id="features">
   <div class="container">
-    <div class="section-header">
-      <div class="badge badge-blue" style="margin-bottom:1rem">Fonctionnalités</div>
-      <h2 class="section-title">Tout ce qu'il faut pour<br><span style="color:var(--red2)">dominer les marchés</span></h2>
-      <p class="section-sub">Des outils de niveau institutionnel rendus accessibles à tous.</p>
+    <div class="sec-hd">
+      <div class="badge b-blue" style="margin-bottom:1rem">Fonctionnalités</div>
+      <h2 class="sec-t">Tout ce qu'il faut pour<br><span style="color:var(--red2)">dominer les marchés</span></h2>
+      <p class="sec-sub">Des outils de niveau institutionnel rendus accessibles à tous.</p>
     </div>
-    <div class="features-grid">
-      <div class="g-card feature-card card-lift"><div class="feature-icon"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div><div class="feature-title">Cours en Live</div><div class="feature-desc">Prix en temps réel via Twelve Data. MAJ toutes les 5 minutes pendant les heures de marché.</div></div>
-      <div class="g-card feature-card card-lift"><div class="feature-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><div class="feature-title">IA Predictions</div><div class="feature-desc">Random Forest sur 76 actifs. 4 horizons temporels avec scores de confiance hausse/baisse.</div></div>
-      <div class="g-card feature-card card-lift"><div class="feature-icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="feature-title">Signal Battle</div><div class="feature-desc">Vos prédictions vs l'algorithme. Qui performe mieux, vous ou l'IA ?</div></div>
-      <div class="g-card feature-card card-lift"><div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="feature-title">Tribe Score</div><div class="feature-desc">Un score de discipline qui récompense la constance. Pas la chance.</div></div>
-      <div class="g-card feature-card card-lift"><div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="feature-title">100% simulé</div><div class="feature-desc">Zéro argent réel, zéro risque. 500€ virtuels pour apprendre sans pression.</div></div>
-      <div class="g-card feature-card card-lift"><div class="feature-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="feature-title">Private Equity</div><div class="feature-desc">Simulez des deals illiquides comme un vrai fonds. Unique sur le marché.</div></div>
+    <div class="feat-grid">
+      <div class="g-card feat-card card-lift"><div class="feat-icon"><svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div><div class="feat-t">Cours en Live</div><div class="feat-d">Prix en temps réel via Twelve Data. MAJ toutes les 5 minutes pendant les heures de marché.</div></div>
+      <div class="g-card feat-card card-lift"><div class="feat-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><div class="feat-t">IA Predictions</div><div class="feat-d">Random Forest sur 76 actifs. 4 horizons temporels avec scores de confiance.</div></div>
+      <div class="g-card feat-card card-lift"><div class="feat-icon"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div><div class="feat-t">Signal Battle</div><div class="feat-d">Vos prédictions vs l'algorithme. Qui performe mieux, vous ou l'IA ?</div></div>
+      <div class="g-card feat-card card-lift"><div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="feat-t">Tribe Score</div><div class="feat-d">Score de discipline qui récompense la constance et la gestion du risque.</div></div>
+      <div class="g-card feat-card card-lift"><div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="feat-t">100% simulé</div><div class="feat-d">Zéro argent réel. 500€ virtuels pour apprendre sans aucune pression.</div></div>
+      <div class="g-card feat-card card-lift"><div class="feat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="feat-t">Private Equity</div><div class="feat-d">Simulez des deals illiquides comme un vrai fonds. Unique sur le marché.</div></div>
     </div>
   </div>
 </section>
@@ -478,48 +417,31 @@
 <!-- How -->
 <section id="how" class="how-bg">
   <div class="container">
-    <div class="section-header">
-      <div class="badge badge-amber" style="margin-bottom:1rem">Comment ça marche</div>
-      <h2 class="section-title">Trois étapes vers la <span style="color:var(--amber)">maîtrise</span></h2>
+    <div class="sec-hd">
+      <div class="badge b-amber" style="margin-bottom:1rem">Comment ça marche</div>
+      <h2 class="sec-t">Trois étapes vers la <span style="color:var(--amber)">maîtrise</span></h2>
     </div>
     <div class="steps-grid">
-      <div class="g-card step-card card-lift">
-        <div class="step-num">01</div>
-        <div class="step-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-        <div class="step-title">Crée ta tribu</div>
-        <div class="step-desc">Invite tes proches. Chacun démarre avec 500€ virtuels le même jour.</div>
-      </div>
-      <div class="g-card step-card card-lift">
-        <div class="step-num">02</div>
-        <div class="step-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <div class="step-title">Construis ton portefeuille</div>
-        <div class="step-desc">76 actifs : ETFs, CAC40, Dow Jones, crypto, obligations, PE.</div>
-      </div>
-      <div class="g-card step-card card-lift">
-        <div class="step-num">03</div>
-        <div class="step-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div>
-        <div class="step-title">Grimpe au classement</div>
-        <div class="step-desc">Tribe Score hebdomadaire. Discipline et gestion du risque récompensées.</div>
-      </div>
+      <div class="g-card step-card card-lift"><div class="step-n">01</div><div class="step-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="step-t">Crée ta tribu</div><div class="step-d">Invite tes proches. Chacun démarre avec 500€ virtuels le même jour.</div></div>
+      <div class="g-card step-card card-lift"><div class="step-n">02</div><div class="step-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div><div class="step-t">Construis ton portefeuille</div><div class="step-d">76 actifs : ETFs, CAC40, Dow Jones, crypto, obligations, PE.</div></div>
+      <div class="g-card step-card card-lift"><div class="step-n">03</div><div class="step-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg></div><div class="step-t">Grimpe au classement</div><div class="step-d">Tribe Score hebdomadaire. Discipline et gestion du risque récompensées.</div></div>
     </div>
   </div>
 </section>
 
 <!-- CTA -->
-<section class="cta-section">
+<section class="cta-sec">
   <div class="cta-glow"></div>
   <div class="container">
-    <div class="cta-inner">
-      <div class="badge badge-red" style="margin-bottom:1.5rem">Accès privé · Gratuit</div>
-      <h2 class="cta-title">Prêt à rejoindre<br><span style="color:var(--red2)">ta tribu ?</span></h2>
-      <p class="cta-sub">500€ virtuels. Aucune carte bancaire requise.</p>
-      <div class="cta-actions">
-        <button class="btn btn-primary glow-btn" style="font-size:1.1rem;padding:.85rem 2.5rem" onclick="scrollToProfiles()">
-          Accéder au dashboard
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-      </div>
-      <p class="cta-legal">Richch est une plateforme de simulation éducative. Aucun conseil en investissement n'est fourni.</p>
+    <div class="cta-box">
+      <div class="badge b-red" style="margin-bottom:1.5rem">Accès privé · Gratuit</div>
+      <h2 class="cta-t">Prêt à rejoindre<br><span style="color:var(--red2)">ta tribu ?</span></h2>
+      <p style="color:var(--w40);font-size:1.05rem;margin-bottom:2.5rem">500€ virtuels. Aucune carte bancaire requise.</p>
+      <button class="btn btn-red glow" style="font-size:1.1rem;padding:.85rem 2.5rem;margin-bottom:1.5rem" onclick="document.getElementById('profils').scrollIntoView({behavior:'smooth'})">
+        Accéder au dashboard
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <p style="font-size:.75rem;color:rgba(255,255,255,.2);max-width:36rem;margin:0 auto">Richch est une plateforme de simulation éducative. Aucun conseil en investissement n'est fourni.</p>
     </div>
   </div>
 </section>
@@ -527,133 +449,94 @@
 <!-- Footer -->
 <footer>
   <div class="container">
-    <div class="footer-inner">
-      <a href="#" class="nav-logo">
-        <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAQABgADASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAj/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AIyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//9k=" alt="Richch" style="height:1.5rem"/>
-        <span style="font-size:.875rem">Richch</span>
-      </a>
-      <div class="footer-links">
-        <a href="#">À propos</a>
-        <a href="#">Mentions légales</a>
-        <a href="#">Contact</a>
-      </div>
-      <div class="footer-copy">© 2026 Richch · Simulation uniquement</div>
+    <div class="foot-inner">
+      <a class="logo" href="#"><img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAQABgADASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAj/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AIyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//9k=" alt="Richch" style="height:1.5rem"/><span style="font-size:.875rem">Richch</span></a>
+      <div class="foot-links"><a href="#">À propos</a><a href="#">Mentions légales</a><a href="#">Contact</a></div>
+      <div class="foot-copy">© 2026 Richch · Simulation uniquement</div>
     </div>
   </div>
 </footer>
-
 </div><!-- /landing -->
 
-<!-- ════════════════════════════════════════
-     PASSWORD MODAL
-════════════════════════════════════════ -->
+<!-- ══ MODAL ══ -->
 <div class="modal-overlay" id="modal">
   <div class="modal-box">
-    <span class="modal-emoji" id="modal-emoji"></span>
-    <div class="modal-name" id="modal-name"></div>
-    <div class="modal-type" id="modal-type"></div>
-    <div class="modal-input-wrap">
-      <input class="modal-input" type="password" id="modal-input" placeholder="••••••••" autocomplete="off"/>
-    </div>
-    <div class="modal-error" id="modal-error"></div>
-    <div class="modal-actions">
+    <span class="m-emoji" id="m-emoji"></span>
+    <div class="m-name" id="m-name"></div>
+    <div class="m-type" id="m-type"></div>
+    <input class="m-input" type="password" id="m-input" placeholder="••••••••" autocomplete="off"/>
+    <div class="m-error" id="m-error"></div>
+    <div class="m-btns">
       <button class="btn btn-dark" onclick="closeModal()">Annuler</button>
-      <button class="btn btn-primary glow-btn" onclick="checkPassword()">
-        Accéder
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </button>
+      <button class="btn btn-red glow" onclick="checkPwd()">Accéder <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg></button>
     </div>
-    <div class="modal-hint" id="modal-hint"></div>
   </div>
 </div>
 
-<!-- ════════════════════════════════════════
-     DASHBOARD
-════════════════════════════════════════ -->
+<!-- ══ DASHBOARD ══ -->
 <div id="dashboard">
   <div class="dash-nav">
-    <div class="dash-nav-left">
-      <a href="#" class="dash-nav-logo" onclick="goHome()">
+    <div class="dash-nav-l">
+      <div class="dash-logo" onclick="goHome()">
         <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAQABgADASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAj/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AIyAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//9k=" alt="Richch"/>
         <span>Richch</span>
-      </a>
-      <div class="dash-profile-badge">
-        <span class="dash-profile-emoji" id="dash-emoji"></span>
-        <span class="dash-profile-name" id="dash-name"></span>
+      </div>
+      <div class="dash-badge">
+        <span id="d-emoji" style="font-size:1.1rem"></span>
+        <span id="d-name" style="font-weight:600;font-size:.875rem"></span>
       </div>
     </div>
-    <div class="dash-nav-right">
-      <div class="dash-live">
-        <div class="dash-live-dot"></div>
-        Live · MAJ 5min
-      </div>
+    <div class="dash-nav-r">
+      <div class="live-ind"><div class="live-dot"></div>Live · MAJ 5min</div>
       <button class="btn btn-dark btn-sm" onclick="goHome()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
         Retour
       </button>
     </div>
   </div>
-
   <div class="dash-body">
-    <!-- Profile switcher -->
-    <div class="profiles-switcher" id="profiles-switcher"></div>
-
-    <!-- KPIs -->
+    <div class="prof-tabs" id="p-tabs"></div>
     <div class="kpi-grid" id="kpi-grid"></div>
-
-    <!-- Positions -->
-    <div class="positions-card">
-      <div class="pos-card-header">
-        <span class="pos-card-title">Positions</span>
-        <span class="badge badge-green" id="pos-count" style="font-size:.65rem"></span>
+    <div class="pos-card">
+      <div class="pos-card-hd">
+        <span class="pos-card-hd-t">Positions</span>
+        <span class="badge b-green" id="pos-count" style="font-size:.65rem"></span>
       </div>
-      <div class="pos-header">
-        <div>Actif</div><div>Initial</div><div>Actuel</div><div>P&L · Signal IA</div><div>Risque</div>
-      </div>
-      <div id="positions-body"></div>
+      <div class="pos-cols"><div>Actif</div><div>Initial</div><div>Actuel</div><div>P&L · Signal IA</div><div>Risque</div></div>
+      <div id="pos-body"></div>
     </div>
-
-    <!-- Bottom grid -->
     <div class="bottom-grid">
-      <!-- IA Signals -->
-      <div class="dash-card">
-        <div class="dash-card-header">
-          🤖 Top Opportunités IA · Horizon 5j · 76 actifs
-        </div>
-        <div class="dash-card-body">
-          <div class="signal-section">
+      <div class="d-card">
+        <div class="d-card-hd">🤖 Top Opportunités IA · Horizon 5j · 76 actifs</div>
+        <div class="d-card-body">
+          <div class="sig-cols">
             <div>
-              <div class="signal-col-title up">↗ Opportunités de hausse</div>
-              <div id="signals-up"></div>
+              <div class="sig-col-t up">↗ Opportunités de hausse</div>
+              <div id="sig-up"></div>
             </div>
             <div>
-              <div class="signal-col-title down">↘ Risques de baisse</div>
-              <div id="signals-down"></div>
+              <div class="sig-col-t down">↘ Risques de baisse</div>
+              <div id="sig-dn"></div>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Répartition + Journal -->
-      <div style="display:flex;flex-direction:column;gap:1.5rem">
-        <div class="dash-card">
-          <div class="dash-card-header">Répartition</div>
-          <div class="dash-card-body">
-            <div class="repartition-bar" id="rep-bar"></div>
-            <div class="rep-legend" id="rep-legend"></div>
-          </div>
+      <div class="right-col">
+        <div class="d-card">
+          <div class="d-card-hd">Répartition</div>
+          <div class="d-card-body"><div class="rep-bar" id="rep-bar"></div><div class="rep-leg" id="rep-leg"></div></div>
         </div>
-        <div class="dash-card" style="flex:1">
-          <div class="dash-card-header">
-            <span id="journal-title">Journal</span>
-            <button class="btn btn-dark btn-sm" onclick="toggleJournal()">+ Note</button>
+        <div class="d-card" style="flex:1">
+          <div class="d-card-hd">
+            <span id="jour-title">Journal</span>
+            <button class="btn btn-dark btn-sm" onclick="toggleJour()">+ Note</button>
           </div>
-          <div class="dash-card-body">
-            <div id="journal-form">
-              <textarea class="journal-input" id="journal-input" rows="3" placeholder="Tes réflexions sur tes investissements..."></textarea>
-              <button class="btn btn-red-soft btn-sm" onclick="saveNote()" style="width:100%;justify-content:center">Sauvegarder</button>
+          <div class="d-card-body">
+            <div class="jour-form" id="jour-form">
+              <textarea class="jour-input" id="jour-input" rows="3" placeholder="Tes réflexions sur tes investissements..."></textarea>
+              <button class="btn btn-sm" style="background:rgba(229,62,62,.1);color:var(--red2);border:1px solid rgba(229,62,62,.2);width:100%;justify-content:center" onclick="saveNote()">Sauvegarder</button>
             </div>
-            <div id="journal-notes"></div>
+            <div id="jour-notes"></div>
           </div>
         </div>
       </div>
@@ -662,323 +545,244 @@
 </div>
 
 <script>
-// ══════════════════════════════════════
-// DATA
-// ══════════════════════════════════════
-const PROFILES = [
+var PROFILES = [
   {
-    id:'greg', emoji:'🧑🏾‍🦲', name:'Greg', type:'Équilibré',
-    password:'greg123',
-    capital:'500,00 €', portfolio:'645,59 €', gain:'+145,59 €', pct:'+29.12%', up:true,
-    start:'2026-03-07', positions:4,
-    color:'#e53e3e',
+    id:'greg',emoji:'\u{1F9D1}\u{1F3FE}\u{200D}\u{1F9B2}',name:'Greg',type:'\u00C9quilibr\u00E9',
+    pwd:'greg123',
+    capital:'500,00 \u20AC',portfolio:'645,59 \u20AC',gain:'+145,59 \u20AC',pct:'+29.12%',up:true,
+    start:'2026-03-07',nb:4,
     pos:[
-      {name:'ETF Défense Europe',sub:'DFEN · Défense · $230.77',initial:'150,00 €',actuel:'247,25 €',pnl:'+97,25 €',up:true,
-       signals:[{h:'1j',pct:56.7,up:true},{h:'3j',pct:60.4,up:true},{h:'5j',pct:58.8,up:true},{h:'10j',pct:70.0,up:true}],risk:'Moyen'},
-      {name:'ETF S&P 500',sub:'SP5 · USA Large Cap · $564.01',initial:'150,00 €',actuel:'174,74 €',pnl:'+24,74 €',up:true,
-       signals:[{h:'1j',pct:90.8,up:true},{h:'3j',pct:90.1,up:true},{h:'5j',pct:86.5,up:true},{h:'10j',pct:87.7,up:true}],risk:'Moyen'},
-      {name:'ETF Obligations 1-3Y',sub:'EMUG · Obligations · $82.55',initial:'100,00 €',actuel:'100,66 €',pnl:'+0,66 €',up:true,
-       signals:[{h:'1j',pct:92.1,up:true},{h:'3j',pct:40.0,up:false},{h:'5j',pct:44.4,up:false},{h:'10j',pct:40.0,up:false}],risk:'Faible'},
-      {name:'ETF Stoxx 600 Europe',sub:'STOX · Europe · $42.37',initial:'100,00 €',actuel:'122,94 €',pnl:'+22,94 €',up:true,
-       signals:[{h:'1j',pct:52.8,up:true},{h:'3j',pct:54.0,up:true},{h:'5j',pct:50.8,up:true},{h:'10j',pct:85.0,up:true}],risk:'Moyen'},
+      {name:'ETF D\u00E9fense Europe',sub:'DFEN \u00B7 D\u00E9fense \u00B7 $230.77',ini:'150,00 \u20AC',act:'247,25 \u20AC',pnl:'+97,25 \u20AC',up:true,
+       sig:[{h:'1j',p:56.7,u:true},{h:'3j',p:60.4,u:true},{h:'5j',p:58.8,u:true},{h:'10j',p:70.0,u:true}],risk:'Moyen'},
+      {name:'ETF S&P 500',sub:'SP5 \u00B7 USA Large Cap \u00B7 $564.01',ini:'150,00 \u20AC',act:'174,74 \u20AC',pnl:'+24,74 \u20AC',up:true,
+       sig:[{h:'1j',p:90.8,u:true},{h:'3j',p:90.1,u:true},{h:'5j',p:86.5,u:true},{h:'10j',p:87.7,u:true}],risk:'Moyen'},
+      {name:'ETF Obligations 1-3Y',sub:'EMUG \u00B7 Obligations \u00B7 $82.55',ini:'100,00 \u20AC',act:'100,66 \u20AC',pnl:'+0,66 \u20AC',up:true,
+       sig:[{h:'1j',p:92.1,u:true},{h:'3j',p:40.0,u:false},{h:'5j',p:44.4,u:false},{h:'10j',p:40.0,u:false}],risk:'Faible'},
+      {name:'ETF Stoxx 600 Europe',sub:'STOX \u00B7 Europe \u00B7 $42.37',ini:'100,00 \u20AC',act:'122,94 \u20AC',pnl:'+22,94 \u20AC',up:true,
+       sig:[{h:'1j',p:52.8,u:true},{h:'3j',p:54.0,u:true},{h:'5j',p:50.8,u:true},{h:'10j',p:85.0,u:true}],risk:'Moyen'},
     ],
-    repartition:[{label:'DFEN',pct:30,color:'#3b82f6'},{label:'SP5',pct:30,color:'#06b6d4'},{label:'EMUG',pct:20,color:'#f97316'},{label:'STOX',pct:20,color:'#ec4899'}],
-    signalsUp:[{name:'EssilorLuxottica',sub:'ELUX · CAC40',pct:'89.7%'},{name:'American Express',sub:'AXP · Dow30',pct:'78.5%'},{name:'ETF Dividendes',sub:'YM · ETF',pct:'77.5%'},{name:'Hermès',sub:'RMS · CAC40',pct:'72.1%'},{name:'Thales',sub:'HO.PA · CAC40',pct:'70.6%'}],
-    signalsDown:[{name:'Michelin',sub:'ML.PA · CAC40',pct:'-74.6%'},{name:'Home Depot',sub:'HD · Dow30',pct:'-73.9%'},{name:'STMicroelectronics',sub:'STMPA · CAC40',pct:'-70%'},{name:'Chevron',sub:'CVX',pct:'-69.4%'},{name:'Société Générale',sub:'GLE.PA · CAC40',pct:'-68.1%'}],
+    rep:[{l:'DFEN',p:30,c:'#3b82f6'},{l:'SP5',p:30,c:'#06b6d4'},{l:'EMUG',p:20,c:'#f97316'},{l:'STOX',p:20,c:'#ec4899'}],
+    sigUp:[{n:'EssilorLuxottica',s:'ELUX \u00B7 CAC40',v:'89.7%'},{n:'American Express',s:'AXP \u00B7 Dow30',v:'78.5%'},{n:'ETF Dividendes',s:'YM \u00B7 ETF',v:'77.5%'},{n:'Herm\u00E8s',s:'RMS \u00B7 CAC40',v:'72.1%'},{n:'Thales',s:'HO.PA \u00B7 CAC40',v:'70.6%'}],
+    sigDn:[{n:'Michelin',s:'ML.PA \u00B7 CAC40',v:'-74.6%'},{n:'Home Depot',s:'HD \u00B7 Dow30',v:'-73.9%'},{n:'STMicroelectronics',s:'STMPA \u00B7 CAC40',v:'-70%'},{n:'Chevron',s:'CVX',v:'-69.4%'},{n:'Soci\u00E9t\u00E9 G\u00E9n\u00E9rale',s:'GLE.PA \u00B7 CAC40',v:'-68.1%'}],
   },
   {
-    id:'nayla', emoji:'👩🏽', name:'Nayla', type:'Croissance',
-    password:'nayla123',
-    capital:'500,00 €', portfolio:'608,09 €', gain:'+108,09 €', pct:'+21.62%', up:true,
-    start:'2026-03-07', positions:3,
-    color:'#a855f7',
+    id:'nayla',emoji:'\u{1F469}\u{1F3FD}',name:'Nayla',type:'Croissance',
+    pwd:'nayla123',
+    capital:'500,00 \u20AC',portfolio:'608,09 \u20AC',gain:'+108,09 \u20AC',pct:'+21.62%',up:true,
+    start:'2026-03-07',nb:3,
     pos:[
-      {name:'ETF Tech USA',sub:'QQQ · Tech · $480.00',initial:'200,00 €',actuel:'248,50 €',pnl:'+48,50 €',up:true,
-       signals:[{h:'1j',pct:75.2,up:true},{h:'3j',pct:82.1,up:true},{h:'5j',pct:78.4,up:true},{h:'10j',pct:80.0,up:true}],risk:'Élevé'},
-      {name:'ETF S&P 500',sub:'SP5 · USA Large Cap · $564.01',initial:'200,00 €',actuel:'234,74 €',pnl:'+34,74 €',up:true,
-       signals:[{h:'1j',pct:90.8,up:true},{h:'3j',pct:90.1,up:true},{h:'5j',pct:86.5,up:true},{h:'10j',pct:87.7,up:true}],risk:'Moyen'},
-      {name:'ETF Marchés Émergents',sub:'EEM · Émergents · $42.00',initial:'100,00 €',actuel:'124,85 €',pnl:'+24,85 €',up:true,
-       signals:[{h:'1j',pct:61.3,up:true},{h:'3j',pct:58.7,up:true},{h:'5j',pct:55.2,up:true},{h:'10j',pct:62.0,up:true}],risk:'Élevé'},
+      {name:'ETF Tech USA',sub:'QQQ \u00B7 Tech \u00B7 $480.00',ini:'200,00 \u20AC',act:'248,50 \u20AC',pnl:'+48,50 \u20AC',up:true,
+       sig:[{h:'1j',p:75.2,u:true},{h:'3j',p:82.1,u:true},{h:'5j',p:78.4,u:true},{h:'10j',p:80.0,u:true}],risk:'\u00C9lev\u00E9'},
+      {name:'ETF S&P 500',sub:'SP5 \u00B7 USA Large Cap \u00B7 $564.01',ini:'200,00 \u20AC',act:'234,74 \u20AC',pnl:'+34,74 \u20AC',up:true,
+       sig:[{h:'1j',p:90.8,u:true},{h:'3j',p:90.1,u:true},{h:'5j',p:86.5,u:true},{h:'10j',p:87.7,u:true}],risk:'Moyen'},
+      {name:'ETF March\u00E9s \u00C9mergents',sub:'EEM \u00B7 \u00C9mergents \u00B7 $42.00',ini:'100,00 \u20AC',act:'124,85 \u20AC',pnl:'+24,85 \u20AC',up:true,
+       sig:[{h:'1j',p:61.3,u:true},{h:'3j',p:58.7,u:true},{h:'5j',p:55.2,u:true},{h:'10j',p:62.0,u:true}],risk:'\u00C9lev\u00E9'},
     ],
-    repartition:[{label:'TECH',pct:40,color:'#a855f7'},{label:'SP5',pct:40,color:'#3b82f6'},{label:'EEM',pct:20,color:'#f97316'}],
-    signalsUp:[{name:'EssilorLuxottica',sub:'ELUX · CAC40',pct:'89.7%'},{name:'American Express',sub:'AXP · Dow30',pct:'78.5%'},{name:'ETF Dividendes',sub:'YM · ETF',pct:'77.5%'},{name:'Hermès',sub:'RMS · CAC40',pct:'72.1%'},{name:'Thales',sub:'HO.PA · CAC40',pct:'70.6%'}],
-    signalsDown:[{name:'Michelin',sub:'ML.PA · CAC40',pct:'-74.6%'},{name:'Home Depot',sub:'HD · Dow30',pct:'-73.9%'},{name:'STMicroelectronics',sub:'STMPA · CAC40',pct:'-70%'},{name:'Chevron',sub:'CVX',pct:'-69.4%'},{name:'Société Générale',sub:'GLE.PA · CAC40',pct:'-68.1%'}],
+    rep:[{l:'TECH',p:40,c:'#a855f7'},{l:'SP5',p:40,c:'#3b82f6'},{l:'EEM',p:20,c:'#f97316'}],
+    sigUp:[{n:'EssilorLuxottica',s:'ELUX \u00B7 CAC40',v:'89.7%'},{n:'American Express',s:'AXP \u00B7 Dow30',v:'78.5%'},{n:'ETF Dividendes',s:'YM \u00B7 ETF',v:'77.5%'},{n:'Herm\u00E8s',s:'RMS \u00B7 CAC40',v:'72.1%'},{n:'Thales',s:'HO.PA \u00B7 CAC40',v:'70.6%'}],
+    sigDn:[{n:'Michelin',s:'ML.PA \u00B7 CAC40',v:'-74.6%'},{n:'Home Depot',s:'HD \u00B7 Dow30',v:'-73.9%'},{n:'STMicroelectronics',s:'STMPA \u00B7 CAC40',v:'-70%'},{n:'Chevron',s:'CVX',v:'-69.4%'},{n:'Soci\u00E9t\u00E9 G\u00E9n\u00E9rale',s:'GLE.PA \u00B7 CAC40',v:'-68.1%'}],
   },
   {
-    id:'hannan', emoji:'👩🏻', name:'Hannan', type:'Défensif',
-    password:'hannan123',
-    capital:'500,00 €', portfolio:'552,79 €', gain:'+52,79 €', pct:'+10.56%', up:true,
-    start:'2026-03-07', positions:3,
-    color:'#10b981',
+    id:'hannan',emoji:'\u{1F469}\u{1F3FB}',name:'Hannan',type:'D\u00E9fensif',
+    pwd:'hannan123',
+    capital:'500,00 \u20AC',portfolio:'552,79 \u20AC',gain:'+52,79 \u20AC',pct:'+10.56%',up:true,
+    start:'2026-03-07',nb:3,
     pos:[
-      {name:'ETF Défense Europe',sub:'DFEN · Défense · $230.77',initial:'150,00 €',actuel:'200,50 €',pnl:'+50,50 €',up:true,
-       signals:[{h:'1j',pct:56.7,up:true},{h:'3j',pct:60.4,up:true},{h:'5j',pct:58.8,up:true},{h:'10j',pct:70.0,up:true}],risk:'Moyen'},
-      {name:'ETF Obligations 1-3Y',sub:'EMUG · Obligations · $82.55',initial:'200,00 €',actuel:'202,29 €',pnl:'+2,29 €',up:true,
-       signals:[{h:'1j',pct:92.1,up:true},{h:'3j',pct:40.0,up:false},{h:'5j',pct:44.4,up:false},{h:'10j',pct:40.0,up:false}],risk:'Faible'},
-      {name:'ETF Stoxx 600 Europe',sub:'STOX · Europe · $42.37',initial:'150,00 €',actuel:'150,00 €',pnl:'+0,00 €',up:true,
-       signals:[{h:'1j',pct:52.8,up:true},{h:'3j',pct:54.0,up:true},{h:'5j',pct:50.8,up:true},{h:'10j',pct:85.0,up:true}],risk:'Faible'},
+      {name:'ETF D\u00E9fense Europe',sub:'DFEN \u00B7 D\u00E9fense \u00B7 $230.77',ini:'150,00 \u20AC',act:'200,50 \u20AC',pnl:'+50,50 \u20AC',up:true,
+       sig:[{h:'1j',p:56.7,u:true},{h:'3j',p:60.4,u:true},{h:'5j',p:58.8,u:true},{h:'10j',p:70.0,u:true}],risk:'Moyen'},
+      {name:'ETF Obligations 1-3Y',sub:'EMUG \u00B7 Obligations \u00B7 $82.55',ini:'200,00 \u20AC',act:'202,29 \u20AC',pnl:'+2,29 \u20AC',up:true,
+       sig:[{h:'1j',p:92.1,u:true},{h:'3j',p:40.0,u:false},{h:'5j',p:44.4,u:false},{h:'10j',p:40.0,u:false}],risk:'Faible'},
+      {name:'ETF Stoxx 600 Europe',sub:'STOX \u00B7 Europe \u00B7 $42.37',ini:'150,00 \u20AC',act:'150,00 \u20AC',pnl:'+0,00 \u20AC',up:true,
+       sig:[{h:'1j',p:52.8,u:true},{h:'3j',p:54.0,u:true},{h:'5j',p:50.8,u:true},{h:'10j',p:85.0,u:true}],risk:'Faible'},
     ],
-    repartition:[{label:'DFEN',pct:30,color:'#10b981'},{label:'EMUG',pct:40,color:'#3b82f6'},{label:'STOX',pct:30,color:'#f97316'}],
-    signalsUp:[{name:'EssilorLuxottica',sub:'ELUX · CAC40',pct:'89.7%'},{name:'American Express',sub:'AXP · Dow30',pct:'78.5%'},{name:'ETF Dividendes',sub:'YM · ETF',pct:'77.5%'},{name:'Hermès',sub:'RMS · CAC40',pct:'72.1%'},{name:'Thales',sub:'HO.PA · CAC40',pct:'70.6%'}],
-    signalsDown:[{name:'Michelin',sub:'ML.PA · CAC40',pct:'-74.6%'},{name:'Home Depot',sub:'HD · Dow30',pct:'-73.9%'},{name:'STMicroelectronics',sub:'STMPA · CAC40',pct:'-70%'},{name:'Chevron',sub:'CVX',pct:'-69.4%'},{name:'Société Générale',sub:'GLE.PA · CAC40',pct:'-68.1%'}],
+    rep:[{l:'DFEN',p:30,c:'#10b981'},{l:'EMUG',p:40,c:'#3b82f6'},{l:'STOX',p:30,c:'#f97316'}],
+    sigUp:[{n:'EssilorLuxottica',s:'ELUX \u00B7 CAC40',v:'89.7%'},{n:'American Express',s:'AXP \u00B7 Dow30',v:'78.5%'},{n:'ETF Dividendes',s:'YM \u00B7 ETF',v:'77.5%'},{n:'Herm\u00E8s',s:'RMS \u00B7 CAC40',v:'72.1%'},{n:'Thales',s:'HO.PA \u00B7 CAC40',v:'70.6%'}],
+    sigDn:[{n:'Michelin',s:'ML.PA \u00B7 CAC40',v:'-74.6%'},{n:'Home Depot',s:'HD \u00B7 Dow30',v:'-73.9%'},{n:'STMicroelectronics',s:'STMPA \u00B7 CAC40',v:'-70%'},{n:'Chevron',s:'CVX',v:'-69.4%'},{n:'Soci\u00E9t\u00E9 G\u00E9n\u00E9rale',s:'GLE.PA \u00B7 CAC40',v:'-68.1%'}],
   },
 ];
 
-const TICKER=[
-  {sym:'DFEN',change:'+2.41%',up:true},{sym:'SP5',change:'+0.88%',up:true},
-  {sym:'EMUG',change:'+0.43%',up:true},{sym:'STOX',change:'+1.12%',up:true},
-  {sym:'QQQ',change:'+1.87%',up:true},{sym:'AAPL',change:'+1.54%',up:true},
-  {sym:'TSLA',change:'+5.83%',up:true},{sym:'NVDA',change:'+3.17%',up:true},
-  {sym:'GOOGL',change:'-1.23%',up:false},{sym:'OIL',change:'-2.11%',up:false},
-  {sym:'GOLD',change:'+0.34%',up:true},{sym:'META',change:'+3.77%',up:true},
+var TICKER=[
+  {s:'DFEN',c:'+2.41%',u:true},{s:'SP5',c:'+0.88%',u:true},{s:'EMUG',c:'+0.43%',u:true},
+  {s:'STOX',c:'+1.12%',u:true},{s:'QQQ',c:'+1.87%',u:true},{s:'AAPL',c:'+1.54%',u:true},
+  {s:'TSLA',c:'+5.83%',u:true},{s:'NVDA',c:'+3.17%',u:true},{s:'GOOGL',c:'-1.23%',u:false},
+  {s:'OIL',c:'-2.11%',u:false},{s:'GOLD',c:'+0.34%',u:true},{s:'META',c:'+3.77%',u:true},
 ];
 
-// ══════════════════════════════════════
-// STATE
-// ══════════════════════════════════════
-let currentProfile = null;
-let pendingProfile = null;
-let notes = JSON.parse(localStorage.getItem('richch_notes') || '{}');
+var cur=null,pend=null,notes=JSON.parse(localStorage.getItem('rn')||'{}');
 
-// ══════════════════════════════════════
-// LANDING
-// ══════════════════════════════════════
-function buildTicker(){
-  const items=[...TICKER,...TICKER];
-  const aU=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>`;
-  const aD=`<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="2 17 8.5 10.5 13.5 15.5 22 7"/></svg>`;
-  document.getElementById('ticker').innerHTML=items.map(t=>`<span class="ticker-item"><span class="sym">${t.sym}</span><span class="${t.up?'up':'down'}">${t.change}</span><span class="${t.up?'up':'down'}">${t.up?aU:aD}</span></span>`).join('');
-}
+/* ticker */
+(function(){
+  var items=TICKER.concat(TICKER);
+  var aU='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/></svg>';
+  var aD='<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="2 17 8.5 10.5 13.5 15.5 22 7"/></svg>';
+  document.getElementById('ticker').innerHTML=items.map(function(t){
+    return '<span class="t-item"><span class="t-sym">'+t.s+'</span><span class="'+(t.u?'up':'down')+'">'+t.c+'</span><span class="'+(t.u?'up':'down')+'">'+(t.u?aU:aD)+'</span></span>';
+  }).join('');
+})();
 
-function buildProfileCards(){
-  document.getElementById('profile-cards').innerHTML=PROFILES.map(p=>`
-    <div class="g-card profile-card card-lift" onclick="openModal('${p.id}')">
-      <span class="profile-lock">🔒</span>
-      <span class="profile-emoji">${p.emoji}</span>
-      <div class="profile-name">${p.name}</div>
-      <div class="profile-type">${p.type}</div>
-      <div class="profile-stats">
-        <div class="ps-item"><div class="ps-label">Capital</div><div class="ps-val">${p.capital}</div></div>
-        <div class="ps-item"><div class="ps-label">Positions</div><div class="ps-val">${p.positions}</div></div>
-      </div>
-      <button class="btn btn-primary btn-sm profile-btn glow-btn">
-        Accéder
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </button>
-    </div>`).join('');
-}
+/* profile cards */
+(function(){
+  document.getElementById('prof-cards').innerHTML=PROFILES.map(function(p){
+    return '<div class="g-card prof-card card-lift" onclick="openModal(''+p.id+'')">'+
+      '<span class="p-lock">&#x1F512;</span>'+
+      '<span class="p-emoji">'+p.emoji+'</span>'+
+      '<div class="p-name">'+p.name+'</div>'+
+      '<div class="p-type">'+p.type+'</div>'+
+      '<div class="p-stats">'+
+        '<div class="p-stat"><div class="p-stat-l">Capital</div><div class="p-stat-v">'+p.capital+'</div></div>'+
+        '<div class="p-stat"><div class="p-stat-l">Positions</div><div class="p-stat-v">'+p.nb+'</div></div>'+
+      '</div>'+
+      '<button class="btn btn-red btn-sm glow" style="width:100%;justify-content:center">Accéder &#8250;</button>'+
+    '</div>';
+  }).join('');
+})();
 
-function scrollToProfiles(){
-  document.getElementById('profils').scrollIntoView({behavior:'smooth'});
-}
-
-// ══════════════════════════════════════
-// MODAL
-// ══════════════════════════════════════
-function openModal(profileId){
-  const p=PROFILES.find(x=>x.id===profileId);
-  if(!p)return;
-  pendingProfile=p;
-  document.getElementById('modal-emoji').textContent=p.emoji;
-  document.getElementById('modal-name').textContent=p.name;
-  document.getElementById('modal-type').textContent=p.type;
-  document.getElementById('modal-error').textContent='';
-  document.getElementById('modal-hint').textContent='';
-  const input=document.getElementById('modal-input');
-  input.value='';
-  input.classList.remove('error');
+/* modal */
+function openModal(id){
+  pend=PROFILES.filter(function(p){return p.id===id;})[0];
+  document.getElementById('m-emoji').textContent=pend.emoji;
+  document.getElementById('m-name').textContent=pend.name;
+  document.getElementById('m-type').textContent=pend.type;
+  document.getElementById('m-error').textContent='';
+  var inp=document.getElementById('m-input');
+  inp.value='';inp.classList.remove('err');
   document.getElementById('modal').classList.add('open');
-  setTimeout(()=>input.focus(),100);
+  setTimeout(function(){inp.focus();},100);
 }
-
-function closeModal(){
-  document.getElementById('modal').classList.remove('open');
-  pendingProfile=null;
-}
-
-function checkPassword(){
-  const input=document.getElementById('modal-input');
-  const val=input.value.trim();
-  if(!val){input.classList.add('error');setTimeout(()=>input.classList.remove('error'),300);return;}
-  if(val===pendingProfile.password){
+function closeModal(){document.getElementById('modal').classList.remove('open');pend=null;}
+function checkPwd(){
+  var inp=document.getElementById('m-input');
+  var v=inp.value.trim();
+  if(!v){inp.classList.add('err');setTimeout(function(){inp.classList.remove('err');},400);return;}
+  if(v===pend.pwd){
     closeModal();
-    openDashboard(pendingProfile);
+    openDash(pend);
   } else {
-    input.classList.add('error');
-    document.getElementById('modal-error').textContent='Mot de passe incorrect. Réessayez.';
-    input.value='';
-    setTimeout(()=>{input.classList.remove('error');document.getElementById('modal-error').textContent='';},1500);
+    inp.classList.add('err');
+    document.getElementById('m-error').textContent='Mot de passe incorrect.';
+    inp.value='';
+    setTimeout(function(){inp.classList.remove('err');document.getElementById('m-error').textContent='';},1500);
   }
 }
+document.getElementById('m-input').addEventListener('keydown',function(e){if(e.key==='Enter')checkPwd();});
+document.getElementById('modal').addEventListener('click',function(e){if(e.target===this)closeModal();});
 
-document.getElementById('modal-input').addEventListener('keydown',e=>{if(e.key==='Enter')checkPassword();});
-document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))closeModal();});
-
-// ══════════════════════════════════════
-// DASHBOARD
-// ══════════════════════════════════════
-function openDashboard(profile){
-  currentProfile=profile;
+/* dashboard */
+function openDash(p){
+  cur=p;
   document.getElementById('landing').style.display='none';
-  const dash=document.getElementById('dashboard');
-  dash.classList.add('active');
+  var d=document.getElementById('dashboard');
+  d.classList.add('show');
   window.scrollTo(0,0);
-  renderDashboard(profile);
+  renderDash(p);
 }
-
 function goHome(){
-  document.getElementById('dashboard').classList.remove('active');
+  document.getElementById('dashboard').classList.remove('show');
   document.getElementById('landing').style.display='block';
-  currentProfile=null;
-  window.scrollTo(0,0);
+  cur=null;window.scrollTo(0,0);
 }
+function renderDash(p){
+  document.getElementById('d-emoji').textContent=p.emoji;
+  document.getElementById('d-name').textContent=p.name;
 
-function renderDashboard(profile){
-  // Header
-  document.getElementById('dash-emoji').textContent=profile.emoji;
-  document.getElementById('dash-name').textContent=profile.name;
-
-  // Switcher tabs
-  document.getElementById('profiles-switcher').innerHTML=PROFILES.map(p=>`
-    <button class="prof-tab ${p.id===profile.id?'active':''}" onclick="switchProfile('${p.id}')">
-      <span class="prof-tab-emoji">${p.emoji}</span>${p.name}
-      <span style="font-size:.65rem;opacity:.6;font-family:'DM Mono',monospace">${p.type}</span>
-    </button>`).join('');
-
-  // KPIs
-  document.getElementById('kpi-grid').innerHTML=`
-    <div class="kpi-card">
-      <div class="kpi-label">Capital Initial</div>
-      <div class="kpi-val">${profile.capital}</div>
-      <div class="kpi-sub">${profile.start}</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Portfolio Actuel</div>
-      <div class="kpi-val">${profile.portfolio}</div>
-      <div class="kpi-sub">${profile.positions} positions</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Gain / Perte</div>
-      <div class="kpi-val kpi-${profile.up?'gain':'loss'}">${profile.gain}</div>
-      <div class="kpi-sub ${profile.up?'up':'down'}">${profile.pct}</div>
-    </div>
-    <div class="kpi-card">
-      <div class="kpi-label">Stratégie</div>
-      <div class="kpi-val" style="font-size:1.1rem;letter-spacing:.05em">${profile.type.toUpperCase()}</div>
-      <div class="kpi-sub">${profile.emoji} ${profile.name}</div>
-    </div>`;
-
-  // Positions
-  document.getElementById('pos-count').textContent=`${profile.positions} position${profile.positions>1?'s':''}`;
-  document.getElementById('positions-body').innerHTML=profile.pos.map(pos=>{
-    const bars=pos.signals.map(s=>`
-      <div class="signal-bar-row">
-        <span style="width:1.5rem;opacity:.5">${s.h}</span>
-        <div class="signal-bar-bg"><div class="signal-bar-fill ${s.up?'fill-up':'fill-down'}" style="width:${s.pct}%"></div></div>
-        <span class="${s.up?'up':'down'}">${s.up?'▲':'▼'}${s.pct}%</span>
-      </div>`).join('');
-    const riskClass=pos.risk==='Faible'?'risk-faible':pos.risk==='Élevé'?'risk-eleve':'risk-moyen';
-    return `<div class="pos-row">
-      <div><div class="pos-asset-name">${pos.name}</div><div class="pos-asset-sub">${pos.sub}</div></div>
-      <div class="pos-val">${pos.initial}</div>
-      <div class="pos-val">${pos.actuel}</div>
-      <div>
-        <div class="pos-val ${pos.up?'up':'down'}" style="margin-bottom:.4rem">${pos.pnl}</div>
-        <div class="signal-bars">${bars}</div>
-      </div>
-      <div><span class="risk-badge ${riskClass}">${pos.risk}</span></div>
-    </div>`;
+  /* tabs */
+  document.getElementById('p-tabs').innerHTML=PROFILES.map(function(x){
+    return '<button class="p-tab'+(x.id===p.id?' active':'')+'" onclick="switchProf(''+x.id+'')">'+
+      '<span>'+x.emoji+'</span>'+x.name+
+      '<span class="p-tab-sub">'+x.type+'</span>'+
+    '</button>';
   }).join('');
 
-  // IA Signals
-  document.getElementById('signals-up').innerHTML=profile.signalsUp.map(s=>`
-    <div class="signal-item">
-      <div><div class="signal-name">${s.name}</div><div class="signal-sub">${s.sub}</div></div>
-      <div class="signal-pct up">↗ ${s.pct}</div>
-    </div>`).join('');
-  document.getElementById('signals-down').innerHTML=profile.signalsDown.map(s=>`
-    <div class="signal-item">
-      <div><div class="signal-name">${s.name}</div><div class="signal-sub">${s.sub}</div></div>
-      <div class="signal-pct down">↘ ${s.pct}</div>
-    </div>`).join('');
+  /* kpis */
+  document.getElementById('kpi-grid').innerHTML=
+    '<div class="kpi"><div class="kpi-l">Capital Initial</div><div class="kpi-v">'+p.capital+'</div><div class="kpi-s">'+p.start+'</div></div>'+
+    '<div class="kpi"><div class="kpi-l">Portfolio Actuel</div><div class="kpi-v">'+p.portfolio+'</div><div class="kpi-s">'+p.nb+' positions</div></div>'+
+    '<div class="kpi"><div class="kpi-l">Gain / Perte</div><div class="kpi-v '+(p.up?'up':'down')+'">'+p.gain+'</div><div class="kpi-s '+(p.up?'up':'down')+'">'+p.pct+'</div></div>'+
+    '<div class="kpi"><div class="kpi-l">Strat\u00E9gie</div><div class="kpi-v" style="font-size:1.1rem;letter-spacing:.04em">'+p.type.toUpperCase()+'</div><div class="kpi-s">'+p.emoji+' '+p.name+'</div></div>';
 
-  // Répartition
-  document.getElementById('rep-bar').innerHTML=profile.repartition.map(r=>`<div class="rep-segment" style="width:${r.pct}%;background:${r.color}"></div>`).join('');
-  document.getElementById('rep-legend').innerHTML=profile.repartition.map(r=>`<div class="rep-item"><div class="rep-dot" style="background:${r.color}"></div>${r.label} ${r.pct}%</div>`).join('');
+  /* positions */
+  document.getElementById('pos-count').textContent=p.nb+' position'+(p.nb>1?'s':'');
+  document.getElementById('pos-body').innerHTML=p.pos.map(function(pos){
+    var bars=pos.sig.map(function(s){
+      return '<div class="sig-row"><span class="sig-h">'+s.h+'</span><div class="sig-bg"><div class="sig-fill '+(s.u?'fill-up':'fill-dn')+'" style="width:'+s.p+'%"></div></div><span class="'+(s.u?'up':'down')+'">'+(s.u?'&#x25B2;':'&#x25BC;')+s.p+'%</span></div>';
+    }).join('');
+    var rc=pos.risk==='Faible'?'r-faible':pos.risk==='\u00C9lev\u00E9'?'r-eleve':'r-moyen';
+    return '<div class="pos-row">'+
+      '<div><div class="pos-name">'+pos.name+'</div><div class="pos-sub">'+pos.sub+'</div></div>'+
+      '<div class="pos-v">'+pos.ini+'</div>'+
+      '<div class="pos-v">'+pos.act+'</div>'+
+      '<div><div class="pos-v '+(pos.up?'up':'down')+'" style="margin-bottom:.4rem">'+pos.pnl+'</div><div class="sig-bars">'+bars+'</div></div>'+
+      '<div><span class="risk '+rc+'">'+pos.risk+'</span></div>'+
+    '</div>';
+  }).join('');
 
-  // Journal
-  document.getElementById('journal-title').textContent=`Journal de ${profile.name}`;
-  renderNotes(profile.id);
+  /* signals */
+  document.getElementById('sig-up').innerHTML=p.sigUp.map(function(s){
+    return '<div class="sig-item"><div><div class="sig-iname">'+s.n+'</div><div class="sig-isub">'+s.s+'</div></div><div class="sig-ipct up">&#x2197; '+s.v+'</div></div>';
+  }).join('');
+  document.getElementById('sig-dn').innerHTML=p.sigDn.map(function(s){
+    return '<div class="sig-item"><div><div class="sig-iname">'+s.n+'</div><div class="sig-isub">'+s.s+'</div></div><div class="sig-ipct down">&#x2198; '+s.v+'</div></div>';
+  }).join('');
+
+  /* répartition */
+  document.getElementById('rep-bar').innerHTML=p.rep.map(function(r){
+    return '<div class="rep-seg" style="width:'+r.p+'%;background:'+r.c+'"></div>';
+  }).join('');
+  document.getElementById('rep-leg').innerHTML=p.rep.map(function(r){
+    return '<div class="rep-item"><div class="rep-dot" style="background:'+r.c+'"></div>'+r.l+' '+r.p+'%</div>';
+  }).join('');
+
+  /* journal */
+  document.getElementById('jour-title').textContent='Journal de '+p.name;
+  renderNotes(p.id);
 }
 
-function switchProfile(profileId){
-  if(profileId===currentProfile.id)return;
-  const p=PROFILES.find(x=>x.id===profileId);
-  currentProfile=p;
-  renderDashboard(p);
-  document.getElementById('dash-emoji').textContent=p.emoji;
-  document.getElementById('dash-name').textContent=p.name;
+function switchProf(id){
+  if(id===cur.id)return;
+  cur=PROFILES.filter(function(p){return p.id===id;})[0];
+  renderDash(cur);
+  document.getElementById('d-emoji').textContent=cur.emoji;
+  document.getElementById('d-name').textContent=cur.name;
   window.scrollTo(0,0);
 }
 
-// ══════════════════════════════════════
-// JOURNAL
-// ══════════════════════════════════════
-function toggleJournal(){
-  const f=document.getElementById('journal-form');
+/* journal */
+function toggleJour(){
+  var f=document.getElementById('jour-form');
   f.classList.toggle('open');
-  if(f.classList.contains('open'))document.getElementById('journal-input').focus();
+  if(f.classList.contains('open'))document.getElementById('jour-input').focus();
 }
-
 function saveNote(){
-  const input=document.getElementById('journal-input');
-  const text=input.value.trim();
-  if(!text)return;
-  const id=currentProfile.id;
+  var inp=document.getElementById('jour-input');
+  var t=inp.value.trim();if(!t)return;
+  var id=cur.id;
   if(!notes[id])notes[id]=[];
-  notes[id].unshift({text,date:new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})});
-  localStorage.setItem('richch_notes',JSON.stringify(notes));
-  input.value='';
-  document.getElementById('journal-form').classList.remove('open');
+  notes[id].unshift({t:t,d:new Date().toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})});
+  localStorage.setItem('rn',JSON.stringify(notes));
+  inp.value='';document.getElementById('jour-form').classList.remove('open');
   renderNotes(id);
 }
-
-function renderNotes(profileId){
-  const profileNotes=notes[profileId]||[];
-  const container=document.getElementById('journal-notes');
-  if(!profileNotes.length){
-    container.innerHTML='<div class="journal-empty">Aucune note pour le moment...<br><span style="font-size:.75rem">Ajoutez vos réflexions sur vos investissements</span></div>';
-    return;
-  }
-  container.innerHTML=profileNotes.map(n=>`
-    <div class="journal-note">
-      <div class="journal-note-date">${n.date}</div>
-      ${n.text}
-    </div>`).join('');
+function renderNotes(id){
+  var ns=notes[id]||[];
+  var c=document.getElementById('jour-notes');
+  if(!ns.length){c.innerHTML='<div class="jour-empty">Aucune note pour le moment...<br><span style="font-size:.75rem">Ajoutez vos réflexions sur vos investissements</span></div>';return;}
+  c.innerHTML=ns.map(function(n){return '<div class="jour-note"><div class="jour-note-d">'+n.d+'</div>'+n.t+'</div>';}).join('');
 }
 
-// ══════════════════════════════════════
-// NAV
-// ══════════════════════════════════════
-window.addEventListener('scroll',()=>{
+/* nav */
+window.addEventListener('scroll',function(){
   document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40);
 });
-document.getElementById('hamburger').addEventListener('click',()=>{
-  const m=document.getElementById('mobile-menu'),open=m.classList.toggle('open');
-  document.getElementById('icon-menu').style.display=open?'none':'';
-  document.getElementById('icon-close').style.display=open?'':'none';
+document.getElementById('ham').addEventListener('click',function(){
+  var m=document.getElementById('mob'),o=m.classList.toggle('open');
+  document.getElementById('hm').style.display=o?'none':'';
+  document.getElementById('hx').style.display=o?'':'none';
 });
-function closeMobile(){
-  document.getElementById('mobile-menu').classList.remove('open');
-  document.getElementById('icon-menu').style.display='';
-  document.getElementById('icon-close').style.display='none';
+function closeMob(){
+  document.getElementById('mob').classList.remove('open');
+  document.getElementById('hm').style.display='';
+  document.getElementById('hx').style.display='none';
 }
-
-// ══════════════════════════════════════
-// INIT
-// ══════════════════════════════════════
-buildTicker();
-buildProfileCards();
 </script>
 </body>
 </html>
